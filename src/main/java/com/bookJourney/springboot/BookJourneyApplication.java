@@ -9,5 +9,4 @@ public class BookJourneyApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BookJourneyApplication.class, args);
 	}
-
 }
