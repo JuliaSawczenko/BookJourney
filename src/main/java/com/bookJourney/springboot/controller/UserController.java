@@ -11,6 +11,6 @@ import java.net.Authenticator;
 public class UserController {
 
     public ResponseEntity<?> register(Authentication authentication, UserDTO userDTO) {
-
+        return ResponseEntity.ok().build();
     }
 }
