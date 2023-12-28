@@ -1,7 +1,7 @@
 package com.bookJourney.springboot.repository;
 
-import jakarta.persistence.Entity;
+import org.springframework.stereotype.Repository;
 
-@Entity
+@Repository
 public interface BookDetailRepository {
 }
