@@ -1,5 +1,6 @@
 package com.bookJourney.springboot.controller;
 
+import com.bookJourney.springboot.config.UserAlreadyExistsException;
 import com.bookJourney.springboot.dto.RegistrationRequestDTO;
 import com.bookJourney.springboot.service.UserService;
 import jakarta.validation.Valid;
@@ -21,8 +22,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody @Valid RegistrationRequestDTO registrationRequestDTO) {
-        boolean existed = userService.register(registrationRequestDTO);
-        return existed ? ResponseEntity.badRequest().build() : ResponseEntity.ok().build();
+    public ResponseEntity<?> register(@RequestBody @Valid RegistrationRequestDTO registrationRequestDTO) throws UserAlreadyExistsException {
+        userService.register(registrationRequestDTO);
+        return ResponseEntity.ok("User registered successfully");
     }
 }

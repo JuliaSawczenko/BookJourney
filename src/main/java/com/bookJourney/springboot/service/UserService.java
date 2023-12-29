@@ -2,6 +2,7 @@ package com.bookJourney.springboot.service;
 
 import com.bookJourney.springboot.UserMapper;
 import com.bookJourney.springboot.config.UserAdapter;
+import com.bookJourney.springboot.config.UserAlreadyExistsException;
 import com.bookJourney.springboot.dto.RegistrationRequestDTO;
 import com.bookJourney.springboot.entity.User;
 import com.bookJourney.springboot.repository.UserRepository;
@@ -34,15 +35,13 @@ public class UserService implements UserDetailsService {
         return new UserAdapter(user);
     }
 
-    public boolean register(RegistrationRequestDTO registrationRequestDTO) {
+    public void register(RegistrationRequestDTO registrationRequestDTO) throws UserAlreadyExistsException {
         if (userRepository.existsByUsername(registrationRequestDTO.username())) {
-            return true;
+            throw new UserAlreadyExistsException();
         } else {
             User user = mapper.registrationRequestDTOtoUser(registrationRequestDTO);
             user.setPassword(passwordEncoder.encode(registrationRequestDTO.password()));
-
             userRepository.save(user);
-            return false;
         }
     }
 }

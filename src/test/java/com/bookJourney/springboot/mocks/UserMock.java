@@ -1,0 +1,19 @@
+package com.bookJourney.springboot.mocks;
+
+import com.bookJourney.springboot.entity.User;
+
+import static com.bookJourney.springboot.mocks.MockedValues.*;
+
+public final class UserMock {
+
+    private UserMock() {}
+
+    public static User getBasicUser() {
+        User user = new User();
+        user.setUsername(USERNAME);
+        user.setFirstName(FIRST_NAME);
+        user.setLastName(LAST_NAME);
+
+        return user;
+    }
+}

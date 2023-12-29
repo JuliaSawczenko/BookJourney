@@ -1,3 +1,5 @@
+package com.bookJourney.springboot;
+
 import com.bookJourney.springboot.config.SecurityConfig;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.ApplicationContext;
@@ -10,8 +12,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = SecurityConfig.class)
 class BookJourneyApplicationTests {
 
 	@Autowired
