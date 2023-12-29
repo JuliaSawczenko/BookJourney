@@ -2,6 +2,7 @@ package com.bookJourney.springboot.controller;
 
 import com.bookJourney.springboot.config.SecurityConfig;
 import com.bookJourney.springboot.dto.RegistrationRequestDTO;
+import com.bookJourney.springboot.mocks.RegistrationRequestDTOMock;
 import com.bookJourney.springboot.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -34,7 +35,7 @@ class UserControllerTest {
     @DisplayName("POST api/register adds a User and returns 200")
     void registerUser_success() throws Exception {
         //Given
-        RegistrationRequestDTO dto = new RegistrationRequestDTO("some username", "some password", "name", "lastName");
+        RegistrationRequestDTO dto = RegistrationRequestDTOMock.getBasicRegistrationRequestDTO();
 
         //When & Then
         mockMvc.perform(post("/api/register")

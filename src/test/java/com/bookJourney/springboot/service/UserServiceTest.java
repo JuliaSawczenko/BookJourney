@@ -3,6 +3,7 @@ package com.bookJourney.springboot.service;
 import com.bookJourney.springboot.config.UserAlreadyExistsException;
 import com.bookJourney.springboot.dto.RegistrationRequestDTO;
 import com.bookJourney.springboot.entity.User;
+import com.bookJourney.springboot.mocks.RegistrationRequestDTOMock;
 import com.bookJourney.springboot.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +31,7 @@ public class UserServiceTest {
     @Test
     void registerUser_success() throws UserAlreadyExistsException {
         //Given
-        RegistrationRequestDTO dto = new RegistrationRequestDTO("some username", "some password", "name", "lastName");
+        RegistrationRequestDTO dto = RegistrationRequestDTOMock.getBasicRegistrationRequestDTO();
 
         //When
         userService.register(dto);
