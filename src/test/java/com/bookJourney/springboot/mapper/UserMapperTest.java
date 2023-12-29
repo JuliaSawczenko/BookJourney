@@ -1,6 +1,5 @@
 package com.bookJourney.springboot.mapper;
 
-import com.bookJourney.springboot.UserMapper;
 import com.bookJourney.springboot.dto.RegistrationRequestDTO;
 import com.bookJourney.springboot.entity.User;
 import com.bookJourney.springboot.mocks.RegistrationRequestDTOMock;

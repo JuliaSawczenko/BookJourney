@@ -1,4 +1,4 @@
-package com.bookJourney.springboot;
+package com.bookJourney.springboot.mapper;
 
 import com.bookJourney.springboot.dto.RegistrationRequestDTO;
 import com.bookJourney.springboot.entity.User;

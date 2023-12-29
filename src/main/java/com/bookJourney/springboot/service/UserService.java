@@ -1,6 +1,6 @@
 package com.bookJourney.springboot.service;
 
-import com.bookJourney.springboot.UserMapper;
+import com.bookJourney.springboot.mapper.UserMapper;
 import com.bookJourney.springboot.config.UserAdapter;
 import com.bookJourney.springboot.config.UserAlreadyExistsException;
 import com.bookJourney.springboot.dto.RegistrationRequestDTO;
