@@ -12,9 +12,9 @@ import org.mockito.Mock;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 public class UserServiceTest {
@@ -29,7 +29,7 @@ public class UserServiceTest {
     private UserService userService;
 
     @Test
-    void registerUser_success() throws UserAlreadyExistsException {
+    public void registerUser_success() throws UserAlreadyExistsException {
         //Given
         RegistrationRequestDTO dto = RegistrationRequestDTOMock.getBasicRegistrationRequestDTO();
 
@@ -38,5 +38,19 @@ public class UserServiceTest {
 
         //Then
         verify(userRepository, times(1)).save(any(User.class));
+    }
+
+    public void registerUser_alreadyExists() throws UserAlreadyExistsException {
+        //Given
+        RegistrationRequestDTO dto = RegistrationRequestDTOMock.getBasicRegistrationRequestDTO();
+
+        //When
+        when(userRepository.existsByUsername(anyString())).thenReturn(true);
+
+        //Then
+        assertThrows(UserAlreadyExistsException.class, () -> {
+            userService.register(dto);
+        });
+        verify(userRepository, times(0)).save(any(User.class));
     }
 }

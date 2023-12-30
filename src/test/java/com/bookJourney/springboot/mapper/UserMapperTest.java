@@ -13,7 +13,7 @@ public class UserMapperTest {
     private UserMapper mapper = Mappers.getMapper(UserMapper.class);
 
     @Test
-    void testRegistrationRequestDTOtoUser() {
+    public void testRegistrationRequestDTOtoUser() {
         //Given
         RegistrationRequestDTO dto = RegistrationRequestDTOMock.getBasicRegistrationRequestDTO();
 

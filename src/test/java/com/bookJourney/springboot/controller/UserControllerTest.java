@@ -33,7 +33,7 @@ class UserControllerTest {
 
     @Test
     @DisplayName("POST api/register adds a User and returns 200")
-    void registerUser_success() throws Exception {
+    public void registerUser_success() throws Exception {
         //Given
         RegistrationRequestDTO dto = RegistrationRequestDTOMock.getBasicRegistrationRequestDTO();
 
