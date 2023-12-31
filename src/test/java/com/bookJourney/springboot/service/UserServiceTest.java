@@ -40,6 +40,7 @@ public class UserServiceTest {
         verify(userRepository, times(1)).save(any(User.class));
     }
 
+    @Test
     public void registerUser_alreadyExists() throws UserAlreadyExistsException {
         //Given
         RegistrationRequestDTO dto = RegistrationRequestDTOMock.getBasicRegistrationRequestDTO();
