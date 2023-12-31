@@ -1,5 +1,6 @@
 package com.bookJourney.springboot.service;
 
+import com.bookJourney.springboot.dto.ProfileDTO;
 import com.bookJourney.springboot.mapper.UserMapper;
 import com.bookJourney.springboot.config.UserAdapter;
 import com.bookJourney.springboot.config.UserAlreadyExistsException;
@@ -14,6 +15,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Optional;
+
 @Service
 public class UserService implements UserDetailsService {
 
@@ -21,7 +25,7 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final UserMapper mapper = Mappers.getMapper(UserMapper.class);
 
-    public UserService(@Autowired UserRepository userRepository,@Autowired PasswordEncoder passwordEncoder) {
+    public UserService(@Autowired UserRepository userRepository, @Autowired PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -43,5 +47,20 @@ public class UserService implements UserDetailsService {
             user.setPassword(passwordEncoder.encode(registrationRequestDTO.password()));
             userRepository.save(user);
         }
+    }
+
+    public void processSuccessfulLogin(String username) {
+        User user = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        user.setLastLogin(LocalDate.now());
+        userRepository.save(user);
+    }
+
+    public ProfileDTO getProfileDTO(String username) {
+        User user = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        return mapper.userToProfileDTO(user);
     }
 }

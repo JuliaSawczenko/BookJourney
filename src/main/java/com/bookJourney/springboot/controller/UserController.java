@@ -2,6 +2,7 @@ package com.bookJourney.springboot.controller;
 
 import com.bookJourney.springboot.config.UserAlreadyExistsException;
 import com.bookJourney.springboot.dto.LoginDTO;
+import com.bookJourney.springboot.dto.ProfileDTO;
 import com.bookJourney.springboot.dto.RegistrationRequestDTO;
 import com.bookJourney.springboot.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,12 +16,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
@@ -51,6 +48,7 @@ public class UserController {
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            userService.processSuccessfulLogin(loginDTO.username());
 
             return ResponseEntity.ok("Login successful.");
 
@@ -68,4 +66,12 @@ public class UserController {
         return ResponseEntity.ok("Logged out successfully.");
 
     }
+
+    @GetMapping("/profile")
+    public ResponseEntity<ProfileDTO> seeProfile(Authentication authentication) {
+        String username = authentication.getName();
+        ProfileDTO profileDTO = userService.getProfileDTO(username);
+        return ResponseEntity.ok(profileDTO);
+    }
+
 }
