@@ -2,6 +2,8 @@ package com.bookJourney.springboot.mocks;
 
 import com.bookJourney.springboot.entity.User;
 
+import java.time.LocalDate;
+
 import static com.bookJourney.springboot.mocks.MockedValues.*;
 
 public final class UserMock {
@@ -13,6 +15,7 @@ public final class UserMock {
         user.setUsername(USERNAME);
         user.setFirstName(FIRST_NAME);
         user.setLastName(LAST_NAME);
+        user.setAccountCreated(LocalDate.now());
 
         return user;
     }

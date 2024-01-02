@@ -2,7 +2,9 @@ package com.bookJourney.springboot.controller;
 
 import com.bookJourney.springboot.config.SecurityConfig;
 import com.bookJourney.springboot.dto.LoginDTO;
+import com.bookJourney.springboot.dto.ProfileDTO;
 import com.bookJourney.springboot.dto.RegistrationRequestDTO;
+import com.bookJourney.springboot.mocks.ProfileDTOMock;
 import com.bookJourney.springboot.mocks.RegistrationRequestDTOMock;
 import com.bookJourney.springboot.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,13 +18,16 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.time.LocalDate;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserController.class)
 @Import(SecurityConfig.class)
@@ -90,5 +95,28 @@ class UserControllerTest {
         mockMvc.perform(post("/api/logout"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Logged out successfully."));
+    }
+
+    @Test
+    @DisplayName("GET api/profile returns information about user's profile and 200")
+    @WithMockUser(username = "testUser")
+    public void getProfileInformation_success() throws Exception {
+        //Given
+        ProfileDTO profileDTO = ProfileDTOMock.getProfileDTO();
+
+        //When
+        when(userService.getProfileDTO("testUser")).thenReturn(profileDTO);
+
+        //Then
+        mockMvc.perform(get("/api/profile"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.username").value("testUser"))
+                .andExpect(jsonPath("$.firstName").value("Julia"))
+                .andExpect(jsonPath("$.lastName").value("Kwiatkowska"))
+                .andExpect(jsonPath("$.accountCreated").value(String.valueOf(LocalDate.now())));
+
+        verify(userService, times(1)).getProfileDTO("testUser");
+
     }
 }
