@@ -1,9 +1,7 @@
 package com.bookJourney.springboot.controller;
 
 import com.bookJourney.springboot.config.SecurityConfig;
-import com.bookJourney.springboot.dto.LoginDTO;
-import com.bookJourney.springboot.dto.ProfileDTO;
-import com.bookJourney.springboot.dto.RegistrationRequestDTO;
+import com.bookJourney.springboot.dto.*;
 import com.bookJourney.springboot.mocks.ProfileDTOMock;
 import com.bookJourney.springboot.mocks.RegistrationRequestDTOMock;
 import com.bookJourney.springboot.service.UserService;
@@ -25,8 +23,7 @@ import java.time.LocalDate;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserController.class)
@@ -118,5 +115,63 @@ class UserControllerTest {
 
         verify(userService, times(1)).getProfileDTO("testUser");
 
+    }
+
+    @Test
+    @DisplayName("PUT api/change_password changes user password and returns 200")
+    @WithMockUser(username = "testUser")
+    public void changePassword_success() throws Exception {
+        //Given
+        PasswordChangeDTO passwordChangeDTO = new PasswordChangeDTO("currentPassword", "newPassword");
+
+        //When
+        when(userService.changePassword(eq("testUser"), any(PasswordChangeDTO.class))).thenReturn(true);
+
+        //Then
+        mockMvc.perform(put("/api/change_password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(passwordChangeDTO)))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Password changed successfully."));
+    }
+
+    @Test
+    @DisplayName("PUT api/change_password fails if current password is incorrect and returns 400")
+    @WithMockUser(username = "testUser")
+    public void changePassword_failure() throws Exception {
+        //Given
+        PasswordChangeDTO passwordChangeDTO = new PasswordChangeDTO("currentPassword", "newPassword");
+
+        //When
+        when(userService.changePassword(eq("testUser"), any(PasswordChangeDTO.class))).thenReturn(false);
+
+        //Then
+        mockMvc.perform(put("/api/change_password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(passwordChangeDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Current password not correct"));
+
+    }
+
+    @Test
+    @DisplayName("PUT api/change_name changes user's name and returns 200")
+    @WithMockUser(username = "testUser")
+    public void changeName_success() throws Exception {
+        // Given
+        NameChangeDTO nameChangeDTO = new NameChangeDTO("newFirstName", "newLastName");
+        String username = "testUser";
+
+        //When
+        doNothing().when(userService).changeName(eq(username), any(NameChangeDTO.class));
+
+        //Then
+        mockMvc.perform(put("/api/change_name")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(nameChangeDTO)))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string("Name changed successfully."));
+
+        verify(userService, times(1)).changeName(eq(username), any(NameChangeDTO.class));
     }
 }
