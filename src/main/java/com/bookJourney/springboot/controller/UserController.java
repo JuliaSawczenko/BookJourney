@@ -26,7 +26,7 @@ public class UserController {
     private AuthenticationService authenticationService;
 
 
-    public UserController(@Autowired UserService userService,@Autowired AuthenticationService authenticationService) {
+    public UserController(@Autowired UserService userService, @Autowired AuthenticationService authenticationService) {
         this.userService = userService;
         this.authenticationService = authenticationService;
     }
