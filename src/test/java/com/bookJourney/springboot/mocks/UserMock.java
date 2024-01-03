@@ -15,7 +15,7 @@ public final class UserMock {
         user.setUsername(USERNAME);
         user.setFirstName(FIRST_NAME);
         user.setLastName(LAST_NAME);
-        user.setAccountCreated(LocalDate.now());
+        user.setAccountCreated(LOCAL_DATE);
 
         return user;
     }

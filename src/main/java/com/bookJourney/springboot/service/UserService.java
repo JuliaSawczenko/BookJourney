@@ -1,12 +1,9 @@
 package com.bookJourney.springboot.service;
 
-import com.bookJourney.springboot.dto.NameChangeDTO;
-import com.bookJourney.springboot.dto.PasswordChangeDTO;
-import com.bookJourney.springboot.dto.ProfileDTO;
+import com.bookJourney.springboot.dto.*;
 import com.bookJourney.springboot.mapper.UserMapper;
 import com.bookJourney.springboot.config.UserAdapter;
 import com.bookJourney.springboot.config.UserAlreadyExistsException;
-import com.bookJourney.springboot.dto.RegistrationRequestDTO;
 import com.bookJourney.springboot.entity.User;
 import com.bookJourney.springboot.repository.UserRepository;
 import org.mapstruct.factory.Mappers;
@@ -41,11 +38,6 @@ public class UserService implements UserDetailsService {
         return new UserAdapter(user);
     }
 
-    private User getUserByUsername(String username) {
-        return userRepository.findUserByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-    }
-
     public void register(RegistrationRequestDTO registrationRequestDTO) throws UserAlreadyExistsException {
         if (userRepository.existsByUsername(registrationRequestDTO.username())) {
             throw new UserAlreadyExistsException();
@@ -56,7 +48,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public void processSuccessfulLogin(String username) {
+    public void updateLastLoginDate(String username) {
         User user = getUserByUsername(username);
         user.setLastLogin(LocalDate.now());
         userRepository.save(user);
@@ -84,5 +76,10 @@ public class UserService implements UserDetailsService {
         user.setFirstName(nameChangeDTO.firstName());
         user.setLastName(nameChangeDTO.lastName());
         userRepository.save(user);
+    }
+
+    private User getUserByUsername(String username) {
+        return userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }

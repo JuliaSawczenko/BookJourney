@@ -2,6 +2,7 @@ package com.bookJourney.springboot.controller;
 
 import com.bookJourney.springboot.config.UserAlreadyExistsException;
 import com.bookJourney.springboot.dto.*;
+import com.bookJourney.springboot.service.AuthenticationService;
 import com.bookJourney.springboot.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,12 +26,12 @@ import java.security.Principal;
 public class UserController {
 
     private UserService userService;
+    private AuthenticationService authenticationService;
 
-    private AuthenticationManager authenticationManager;
 
-    public UserController(@Autowired UserService userService, @Autowired AuthenticationManager authenticationManager) {
+    public UserController(@Autowired UserService userService,@Autowired AuthenticationService authenticationService) {
         this.userService = userService;
-        this.authenticationManager = authenticationManager;
+        this.authenticationService = authenticationService;
     }
 
     @PostMapping("/register")
@@ -42,17 +43,8 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid LoginDTO loginDTO) {
         try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginDTO.username(), loginDTO.password()
-                    )
-            );
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            userService.processSuccessfulLogin(loginDTO.username());
-
+            authenticationService.authenticateUser(loginDTO);
             return ResponseEntity.ok("Login successful.");
-
         }  catch (BadCredentialsException e) {
             return new ResponseEntity<>("Incorrect password or username.", HttpStatus.UNAUTHORIZED);
         }
@@ -78,12 +70,12 @@ public class UserController {
     @PutMapping("change_password")
     public ResponseEntity<?> changePassword(@RequestBody @Valid PasswordChangeDTO passwordChangeDTO, Principal principal) {
         String username = principal.getName();
-        boolean isCurrentPasswordCorrect = userService.changePassword(username, passwordChangeDTO);
+        boolean isPasswordSuccessfullyChanged = userService.changePassword(username, passwordChangeDTO);
 
-        if (!isCurrentPasswordCorrect) {
-            return new ResponseEntity<>("Current password not correct", HttpStatus.BAD_REQUEST);
+        if (isPasswordSuccessfullyChanged) {
+            return ResponseEntity.ok("Password changed successfully.");
         }
-        return ResponseEntity.ok("Password changed successfully.");
+        return new ResponseEntity<>("Current password not correct", HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("change_name")

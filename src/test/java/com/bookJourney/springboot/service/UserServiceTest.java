@@ -10,6 +10,7 @@ import com.bookJourney.springboot.mocks.ProfileDTOMock;
 import com.bookJourney.springboot.mocks.RegistrationRequestDTOMock;
 import com.bookJourney.springboot.mocks.UserMock;
 import com.bookJourney.springboot.repository.UserRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,6 +37,7 @@ public class UserServiceTest {
     private UserService userService;
 
     @Test
+    @DisplayName("Should successfully register a new user")
     public void registerUser_success() throws UserAlreadyExistsException {
         //Given
         RegistrationRequestDTO dto = RegistrationRequestDTOMock.getBasicRegistrationRequestDTO();
@@ -48,6 +50,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Should throw UserAlreadyExistsException for an existing username")
     public void registerUser_alreadyExists() throws UserAlreadyExistsException {
         //Given
         RegistrationRequestDTO dto = RegistrationRequestDTOMock.getBasicRegistrationRequestDTO();
@@ -63,6 +66,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Should successfully retrieve a user's profile DTO")
     public void getProfileDTO_success() {
         //Given
         String username = "testUser";
@@ -79,6 +83,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Should successfully change the user's password")
     public void changePassword_success() {
         //Given
         String username = "testUser";
@@ -103,6 +108,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Should fail to change password with incorrect current password")
     public void changePassword_Failure_IncorrectCurrentPassword() {
         // Given
         String username = "testUser";
@@ -126,6 +132,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Should successfully update the user's name")
     public void changeName_Success() {
         //Given
         String username = "testUser";

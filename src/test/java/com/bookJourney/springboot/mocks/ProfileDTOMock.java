@@ -12,6 +12,6 @@ public class ProfileDTOMock {
     }
     
     public static ProfileDTO getProfileDTO() {
-        return new ProfileDTO(USERNAME, FIRST_NAME, LAST_NAME, LocalDate.now());
+        return new ProfileDTO(USERNAME, FIRST_NAME, LAST_NAME, LOCAL_DATE);
     }
 }
