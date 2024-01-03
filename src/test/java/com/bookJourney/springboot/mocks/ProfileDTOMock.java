@@ -2,8 +2,6 @@ package com.bookJourney.springboot.mocks;
 
 import com.bookJourney.springboot.dto.ProfileDTO;
 
-import java.time.LocalDate;
-
 import static com.bookJourney.springboot.mocks.MockedValues.*;
 
 public class ProfileDTOMock {

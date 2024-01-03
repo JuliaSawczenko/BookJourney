@@ -2,8 +2,6 @@ package com.bookJourney.springboot.mocks;
 
 import com.bookJourney.springboot.entity.User;
 
-import java.time.LocalDate;
-
 import static com.bookJourney.springboot.mocks.MockedValues.*;
 
 public final class UserMock {
