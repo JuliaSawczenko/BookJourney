@@ -13,4 +13,5 @@ public class GlobalHttpErrorHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleUserAlreadyExistsException(UserAlreadyExistsException exception) {
         return new ResponseEntity<>("User with a given username already exists. Please select another username.", HttpStatus.BAD_REQUEST);
     }
+
 }

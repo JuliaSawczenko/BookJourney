@@ -1,5 +1,6 @@
 package com.bookJourney.springboot.mapper;
 
+import com.bookJourney.springboot.dto.ProfileDTO;
 import com.bookJourney.springboot.dto.RegistrationRequestDTO;
 import com.bookJourney.springboot.entity.User;
 import org.mapstruct.*;
@@ -18,6 +19,8 @@ public interface UserMapper {
     @Mapping(target = "moodTrackers", ignore = true)
     @Mapping(target = "password", ignore = true)
     User registrationRequestDTOtoUser(RegistrationRequestDTO dto);
+
+    ProfileDTO userToProfileDTO(User user);
 
     @AfterMapping
     default void setDefaultValues(@MappingTarget User user) {

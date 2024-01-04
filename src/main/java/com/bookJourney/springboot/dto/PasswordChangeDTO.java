@@ -1,4 +1,7 @@
 package com.bookJourney.springboot.dto;
 
-public record PasswordChangeDTO() {
+import jakarta.validation.constraints.Size;
+
+public record PasswordChangeDTO(@Size(min = 8) String currentPassword,
+                                @Size (min = 8) String newPassword) {
 }
