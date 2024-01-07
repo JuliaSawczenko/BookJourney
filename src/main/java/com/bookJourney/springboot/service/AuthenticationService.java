@@ -14,7 +14,6 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
 
-    @Autowired
     public AuthenticationService(AuthenticationManager authenticationManager, UserService userService) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;

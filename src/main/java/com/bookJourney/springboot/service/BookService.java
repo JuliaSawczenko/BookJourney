@@ -4,6 +4,7 @@ import com.bookJourney.springboot.config.BookAlreadyExistsException;
 import com.bookJourney.springboot.config.BookNotFoundException;
 import com.bookJourney.springboot.dto.BookDTO;
 import com.bookJourney.springboot.entity.Book;
+import com.bookJourney.springboot.entity.Mood;
 import com.bookJourney.springboot.entity.User;
 import com.bookJourney.springboot.mapper.BookMapper;
 import com.bookJourney.springboot.repository.BookRepository;
@@ -18,16 +19,16 @@ public class BookService {
     private final UserService userService;
     private final ReviewService reviewService;
     private final GoogleBooksService googleBooksService;
-    private final MoodTrackerService moodTrackerService;
+    private final MoodDataService moodDataService;
     private final BookMapper mapper = Mappers.getMapper(BookMapper.class);
 
 
-    public BookService(@Autowired BookRepository bookRepository, @Autowired UserService userService, @Autowired ReviewService reviewService, @Autowired GoogleBooksService googleBooksService, @Autowired MoodTrackerService moodTrackerService) {
+    public BookService(BookRepository bookRepository, UserService userService, ReviewService reviewService, GoogleBooksService googleBooksService, MoodDataService moodDataService) {
         this.bookRepository = bookRepository;
         this.userService = userService;
         this.reviewService = reviewService;
         this.googleBooksService = googleBooksService;
-        this.moodTrackerService = moodTrackerService;
+        this.moodDataService = moodDataService;
     }
 
     public void addBook(BookDTO bookDTO, String username) throws BookAlreadyExistsException, BookNotFoundException {
@@ -45,10 +46,11 @@ public class BookService {
                 case READ:
                     if (bookDTO.review() != null) {
                         reviewService.addReview(bookDTO.review(), book, user);
+                        moodDataService.submitFinalMoods();
                     }
                     break;
                 case READING:
-                    moodTrackerService.addCurrentMood();
+                    moodDataService.addCurrentMood();
 
             }
         }
