@@ -42,7 +42,13 @@ public class BookService {
             throw new BookAlreadyExistsException();
         } else {
             BookDetail bookDetail = bookDetailRepository.findByTitleAndAuthor(bookDTO.title(), bookDTO.author())
-                            .orElseGet(() -> googleBooksService.getBookDetails(bookDTO.title(), bookDTO.author()));
+                            .orElseGet(() -> {
+                                try {
+                                    return googleBooksService.getBookDetails(bookDTO.title(), bookDTO.author());
+                                } catch (BookNotFoundException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            });
 
             if (bookDetail.getId() == null) {
                 bookDetailRepository.save(bookDetail);

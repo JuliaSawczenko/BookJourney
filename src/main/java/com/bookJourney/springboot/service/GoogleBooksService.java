@@ -16,7 +16,7 @@ public class GoogleBooksService {
     private String apiKey;
 
     public BookDetail getBookDetails(String title, String author) throws BookNotFoundException {
-        String url = "https://www.googleapis.com/books/v1/volumes?q=intitle:" + title + "+inauthor:" + author + "&key=" + apiKey;
+        String url = "https://www.googleapis.com/books/v1/volumes?q=intitle:" + title + "+inauthor:" + author + "&langRestrict=en&key=" + apiKey;
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.getForObject(url, String.class);
 

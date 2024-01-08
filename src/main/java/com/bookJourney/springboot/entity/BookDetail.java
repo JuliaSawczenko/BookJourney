@@ -36,13 +36,13 @@ public class BookDetail {
     @Column
     private String isbn;
 
-    @Column
+    @Column(length = 100000000)
     private String description;
 
     @Column
     private String publishedDate;
 
-    @Column
+    @Column(length = 1000000)
     private String imageUrl;
 
     @OneToMany(mappedBy = "bookDetail", cascade = CascadeType.ALL, orphanRemoval = true)
