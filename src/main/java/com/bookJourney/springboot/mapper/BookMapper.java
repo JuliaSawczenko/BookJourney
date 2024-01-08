@@ -15,7 +15,7 @@ public interface BookMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "bookDetail", ignore = true)
-    @Mapping(target = "isFavourite", ignore = true)
+    @Mapping(target = "favourite", ignore = true)
     @Mapping(target = "startDate", ignore = true)
     @Mapping(target = "endDate", ignore = true)
     @Mapping(target = "moodsAssigned", ignore = true)

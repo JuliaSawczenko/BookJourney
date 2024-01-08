@@ -5,6 +5,8 @@ import com.bookJourney.springboot.repository.MoodRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+
 @Service
 public class MoodDataService {
 
@@ -15,10 +17,10 @@ public class MoodDataService {
     }
 
     //To be implemented
-    public void addCurrentMood() {}
+    public void addCurrentMood(String mood) {}
 
     //To be implemented
-    public void submitFinalMoods() {}
+    public void submitFinalMoods(HashMap<String, Integer> moods) {}
 
     @PostConstruct
     public void populateData() {

@@ -23,12 +23,10 @@ public class Book {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @Column
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "book_details_id")
-    @Column
     private BookDetail bookDetail;
 
     @Enumerated(EnumType.STRING)
@@ -36,7 +34,7 @@ public class Book {
     private BookStatus status;
 
     @Column
-    private boolean isFavourite;
+    private boolean favourite;
 
     @Column
     private LocalDate startDate;
