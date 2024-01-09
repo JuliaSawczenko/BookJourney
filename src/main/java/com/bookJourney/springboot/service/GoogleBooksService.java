@@ -2,6 +2,7 @@ package com.bookJourney.springboot.service;
 
 import com.bookJourney.springboot.config.BookNotFoundException;
 import com.bookJourney.springboot.entity.BookDetail;
+import org.json.JSONException;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
@@ -20,8 +21,8 @@ public class GoogleBooksService {
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.getForObject(url, String.class);
 
-        JSONObject json = new JSONObject(response);
-        if (json.getJSONArray("items").length() > 0) {
+        try {
+            JSONObject json = new JSONObject(response);
             JSONObject volumeInfo = json.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo");
 
             String isbn = volumeInfo.getJSONArray("industryIdentifiers").getJSONObject(0).getString("identifier");
@@ -30,7 +31,7 @@ public class GoogleBooksService {
             String imageUrl = volumeInfo.getJSONObject("imageLinks").getString("thumbnail");
 
             return new BookDetail(title, author, isbn, description, publishedDate, imageUrl);
-        } else {
+        } catch (JSONException e) {
             throw new BookNotFoundException();
         }
     }
