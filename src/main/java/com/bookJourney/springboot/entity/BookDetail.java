@@ -22,6 +22,11 @@ public class BookDetail {
         this.imageUrl = imageUrl;
     }
 
+    public BookDetail(String title, String author) {
+        this.title = title;
+        this.author = author;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column

@@ -80,6 +80,7 @@ class UserControllerTest {
 
         //When
         doThrow(new BadCredentialsException("Incorrect password or username.")).when(authenticationService).authenticateUser(any(LoginDTO.class));
+
         //Then
         mockMvc.perform(post("/api/login")
                 .contentType(MediaType.APPLICATION_JSON)

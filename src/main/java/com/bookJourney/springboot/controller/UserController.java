@@ -7,7 +7,6 @@ import com.bookJourney.springboot.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -26,7 +25,7 @@ public class UserController {
     private AuthenticationService authenticationService;
 
 
-    public UserController(@Autowired UserService userService, @Autowired AuthenticationService authenticationService) {
+    public UserController(UserService userService, AuthenticationService authenticationService) {
         this.userService = userService;
         this.authenticationService = authenticationService;
     }

@@ -45,9 +45,7 @@ public class BookService {
 
         BookDetail bookDetail = fetchOrCreateBookDetail(bookDTO);
 
-        if (bookDetail.getId() == null) {
-            bookDetailRepository.save(bookDetail);
-        }
+        bookDetailRepository.save(bookDetail);
         Book book = mapper.BookDTOtoBook(bookDTO);
         book.setUser(user);
         book.setBookDetail(bookDetail);
