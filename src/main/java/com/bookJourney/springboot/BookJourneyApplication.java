@@ -19,8 +19,7 @@ public class BookJourneyApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/api/**").allowedOrigins("*").allowedMethods("*")
-						.allowedHeaders("*")
-						.allowCredentials(true);
+						.allowedHeaders("*");
 			}
 		};
 
