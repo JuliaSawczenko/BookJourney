@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/api")
 public class UserController {
 
