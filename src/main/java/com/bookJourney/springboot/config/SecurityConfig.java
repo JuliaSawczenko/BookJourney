@@ -32,7 +32,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
-                .cors(cors -> cors.disable())
+                .cors(Customizer.withDefaults())
                 .csrf(configurer -> configurer.disable())
                 .build();
 
