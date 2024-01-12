@@ -9,12 +9,14 @@ import com.bookJourney.springboot.dto.UserInfoResponse;
 import com.bookJourney.springboot.entity.EnumRole;
 import com.bookJourney.springboot.entity.Role;
 import com.bookJourney.springboot.entity.User;
+import com.bookJourney.springboot.mapper.UserMapper;
 import com.bookJourney.springboot.repository.RoleRepository;
 import com.bookJourney.springboot.repository.UserRepository;
 import com.bookJourney.springboot.security.JwtUtils;
 import com.bookJourney.springboot.security.UserAdapter;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +46,8 @@ public class AuthController {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder encoder;
+    private final UserMapper mapper = Mappers.getMapper(UserMapper.class);
+
 
 
     @PostMapping("/login")
@@ -83,9 +87,8 @@ public class AuthController {
         }
 
         // Create new user's account
-        User user = new User(registrationRequestDTO.username(),
-                registrationRequestDTO.email(),
-                encoder.encode(registrationRequestDTO.password()));
+        User user = mapper.registrationRequestDTOtoUser(registrationRequestDTO);
+        user.setPassword(encoder.encode(registrationRequestDTO.password()));
 
         Set<Role> roles = new HashSet<>();
         Role userRole = roleRepository.findByName(EnumRole.ROLE_USER)
