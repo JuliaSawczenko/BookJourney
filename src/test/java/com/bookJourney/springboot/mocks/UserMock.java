@@ -1,13 +1,12 @@
 package com.bookJourney.springboot.mocks;
 
-import com.bookJourney.springboot.entity.User;
-
-import static com.bookJourney.springboot.mocks.MockedValues.*;
-
 public final class UserMock {
 
-    private UserMock() {}
+    private UserMock() {
+    }
+}
 
+    /*
     public static User getBasicUser() {
         User user = new User();
         user.setUsername(USERNAME);
@@ -18,3 +17,4 @@ public final class UserMock {
         return user;
     }
 }
+*/
