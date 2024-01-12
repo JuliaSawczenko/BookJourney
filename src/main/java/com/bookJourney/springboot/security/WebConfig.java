@@ -1,4 +1,4 @@
-package com.bookJourney.springboot.config;
+package com.bookJourney.springboot.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

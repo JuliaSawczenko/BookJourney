@@ -1,15 +1,13 @@
 package com.bookJourney.springboot.service;
 
-import com.bookJourney.springboot.dto.*;
-import com.bookJourney.springboot.mapper.UserMapper;
-import com.bookJourney.springboot.config.UserAdapter;
-import com.bookJourney.springboot.config.UserAlreadyExistsException;
+import com.bookJourney.springboot.dto.NameChangeDTO;
+import com.bookJourney.springboot.dto.PasswordChangeDTO;
+import com.bookJourney.springboot.dto.ProfileDTO;
 import com.bookJourney.springboot.entity.User;
+import com.bookJourney.springboot.mapper.UserMapper;
 import com.bookJourney.springboot.repository.UserRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -28,25 +26,6 @@ public class UserService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    //Spring Security
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository
-                .findUserByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        return new UserAdapter(user);
-    }
-
-    public void register(RegistrationRequestDTO registrationRequestDTO) throws UserAlreadyExistsException {
-        if (userRepository.existsByUsername(registrationRequestDTO.username())) {
-            throw new UserAlreadyExistsException();
-        } else {
-            User user = mapper.registrationRequestDTOtoUser(registrationRequestDTO);
-            user.setPassword(passwordEncoder.encode(registrationRequestDTO.password()));
-            userRepository.save(user);
-        }
-    }
 
     public void updateLastLoginDate(String username) {
         User user = getUserByUsername(username);
