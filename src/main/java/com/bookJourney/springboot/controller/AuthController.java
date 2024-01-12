@@ -56,17 +56,19 @@ public class AuthController {
 
         UserAdapter userDetails = (UserAdapter) authentication.getPrincipal();
 
-        ResponseCookie jwtCookie = jwtUtil.generateJwtCookie(userDetails);
+        String jwt = jwtUtil.generateTokenFromUsername(userDetails.getUsername());
 
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .body(new UserInfoResponse(userDetails.getId(),
-                        userDetails.getUsername(),
-                        userDetails.getEmail(),
-                        roles));
+        return ResponseEntity.ok(new UserInfoResponse(
+                userDetails.getId(),
+                userDetails.getUsername(),
+                userDetails.getEmail(),
+                roles,
+                jwt
+        ));
     }
 
 
@@ -97,8 +99,6 @@ public class AuthController {
     }
     @PostMapping("/logout")
     public ResponseEntity<?> logoutUser() {
-        ResponseCookie cookie = jwtUtil.getCleanJwtCookie();
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(new MessageResponse("You've been signed out!"));
+        return ResponseEntity.ok(new MessageResponse("You've been signed out!"));
     }
 }

@@ -25,7 +25,6 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ProfileDTO> seeProfile() {
         UserDetails userDetails =
                 (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -36,7 +35,6 @@ public class UserController {
     }
 
     @PutMapping("/change_password")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> changePassword(@RequestBody @Valid PasswordChangeDTO passwordChangeDTO) {
         UserDetails userDetails =
                 (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -51,7 +49,6 @@ public class UserController {
     }
 
     @PutMapping("/change_name")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> changeName(@RequestBody @Valid NameChangeDTO nameChangeDTO) {
         UserDetails userDetails =
                 (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
