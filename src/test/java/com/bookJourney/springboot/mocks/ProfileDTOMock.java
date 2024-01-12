@@ -10,6 +10,6 @@ public class ProfileDTOMock {
     }
     
     public static ProfileDTO getProfileDTO() {
-        return new ProfileDTO(USERNAME, FIRST_NAME, LAST_NAME, LOCAL_DATE);
+        return new ProfileDTO(USERNAME, EMAIL, FIRST_NAME, LAST_NAME, LOCAL_DATE);
     }
 }
