@@ -1,13 +1,21 @@
 package com.bookJourney.springboot.mapper;
 
+import com.bookJourney.springboot.dto.ProfileDTO;
+import com.bookJourney.springboot.dto.RegistrationRequestDTO;
+import com.bookJourney.springboot.entity.User;
+import com.bookJourney.springboot.mocks.RegistrationRequestDTOMock;
+import com.bookJourney.springboot.mocks.UserMock;
+import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
+
+import static com.bookJourney.springboot.mocks.MockedValues.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UserMapperTest {
 
     private UserMapper mapper = Mappers.getMapper(UserMapper.class);
 
-}
-/*    @Test
+    @Test
     public void shouldCorrectlyMapRegistrationRequestDTOtoUser() {
         //Given
         RegistrationRequestDTO dto = RegistrationRequestDTOMock.getBasicRegistrationRequestDTO();
@@ -36,4 +44,3 @@ public class UserMapperTest {
         assertEquals(LOCAL_DATE, dto.accountCreated());
     }
 }
-*/

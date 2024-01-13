@@ -1,7 +1,6 @@
 package com.bookJourney.springboot.controller;
 
 
-import com.bookJourney.springboot.config.UserAlreadyExistsException;
 import com.bookJourney.springboot.dto.LoginDTO;
 import com.bookJourney.springboot.dto.MessageResponse;
 import com.bookJourney.springboot.dto.RegistrationRequestDTO;
@@ -17,8 +16,6 @@ import com.bookJourney.springboot.security.UserAdapter;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.mapstruct.factory.Mappers;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -48,8 +45,6 @@ public class AuthController {
     private PasswordEncoder encoder;
     private final UserMapper mapper = Mappers.getMapper(UserMapper.class);
 
-
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid LoginDTO loginDTO) {
 
@@ -77,7 +72,7 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody @Valid RegistrationRequestDTO registrationRequestDTO) throws UserAlreadyExistsException {
+    public ResponseEntity<?> register(@RequestBody @Valid RegistrationRequestDTO registrationRequestDTO) {
         if (userRepository.existsByUsername(registrationRequestDTO.username())) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
         }
@@ -86,7 +81,6 @@ public class AuthController {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
         }
 
-        // Create new user's account
         User user = mapper.registrationRequestDTOtoUser(registrationRequestDTO);
         user.setPassword(encoder.encode(registrationRequestDTO.password()));
 
@@ -94,12 +88,12 @@ public class AuthController {
         Role userRole = roleRepository.findByName(EnumRole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
         roles.add(userRole);
-
         user.setRoles(roles);
-        userRepository.save(user);
 
+        userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
+
     @PostMapping("/logout")
     public ResponseEntity<?> logoutUser() {
         return ResponseEntity.ok(new MessageResponse("You've been signed out!"));

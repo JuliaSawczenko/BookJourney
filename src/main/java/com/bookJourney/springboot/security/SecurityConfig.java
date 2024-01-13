@@ -1,6 +1,7 @@
 package com.bookJourney.springboot.security;
 
 import com.bookJourney.springboot.service.UserDetailsServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,14 +26,11 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Autowired
     UserDetailsServiceImpl userDetailsService;
 
+    @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
-
-    public SecurityConfig(UserDetailsServiceImpl userService, AuthEntryPointJwt unauthorizedHandler) {
-        this.userDetailsService = userService;
-        this.unauthorizedHandler = unauthorizedHandler;
-    }
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {

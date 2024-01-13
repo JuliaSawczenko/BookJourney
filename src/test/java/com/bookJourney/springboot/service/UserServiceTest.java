@@ -1,11 +1,24 @@
 package com.bookJourney.springboot.service;
 
+import com.bookJourney.springboot.dto.NameChangeDTO;
+import com.bookJourney.springboot.dto.PasswordChangeDTO;
+import com.bookJourney.springboot.dto.ProfileDTO;
+import com.bookJourney.springboot.entity.User;
+import com.bookJourney.springboot.mocks.ProfileDTOMock;
+import com.bookJourney.springboot.mocks.UserMock;
 import com.bookJourney.springboot.repository.UserRepository;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 public class UserServiceTest {
@@ -18,35 +31,6 @@ public class UserServiceTest {
 
     @InjectMocks
     private UserService userService;
-}/*
-    @Test
-    @DisplayName("Should successfully register a new user")
-    public void registerUser_success() throws UserAlreadyExistsException {
-        //Given
-        RegistrationRequestDTO dto = RegistrationRequestDTOMock.getBasicRegistrationRequestDTO();
-
-        //When
-        userService.register(dto);
-
-        //Then
-        verify(userRepository, times(1)).save(any(User.class));
-    }
-
-    @Test
-    @DisplayName("Should throw UserAlreadyExistsException for an existing username")
-    public void registerUser_alreadyExists() throws UserAlreadyExistsException {
-        //Given
-        RegistrationRequestDTO dto = RegistrationRequestDTOMock.getBasicRegistrationRequestDTO();
-
-        //When
-        when(userRepository.existsByUsername(anyString())).thenReturn(true);
-
-        //Then
-        assertThrows(UserAlreadyExistsException.class, () -> {
-            userService.register(dto);
-        });
-        verify(userRepository, times(0)).save(any(User.class));
-    }
 
     @Test
     @DisplayName("Should successfully retrieve a user's profile DTO")
@@ -137,4 +121,3 @@ public class UserServiceTest {
     }
 }
 
-*/

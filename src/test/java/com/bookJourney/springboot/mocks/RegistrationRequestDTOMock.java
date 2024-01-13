@@ -1,13 +1,13 @@
 package com.bookJourney.springboot.mocks;
 
-public class RegistrationRequestDTOMock {
+import com.bookJourney.springboot.dto.RegistrationRequestDTO;
 
-    private RegistrationRequestDTOMock() {
-    }
-}
-/*
+import static com.bookJourney.springboot.mocks.MockedValues.*;
+
+public class RegistrationRequestDTOMock {
+    private RegistrationRequestDTOMock() {}
+
     public static RegistrationRequestDTO getBasicRegistrationRequestDTO() {
-        return new RegistrationRequestDTO(USERNAME, "00000000", FIRST_NAME, LAST_NAME);
-    }
+    return new RegistrationRequestDTO(USERNAME, "00000000", EMAIL, FIRST_NAME, LAST_NAME);
 }
-*/
+}

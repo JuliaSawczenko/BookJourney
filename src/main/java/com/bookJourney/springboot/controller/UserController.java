@@ -8,9 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,20 +24,16 @@ public class UserController {
 
     @GetMapping("/profile")
     public ResponseEntity<ProfileDTO> seeProfile() {
-        UserDetails userDetails =
-                (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        String username = userDetails.getUsername();
         ProfileDTO profileDTO = userService.getProfileDTO(username);
         return ResponseEntity.ok(profileDTO);
     }
 
     @PutMapping("/change_password")
     public ResponseEntity<?> changePassword(@RequestBody @Valid PasswordChangeDTO passwordChangeDTO) {
-        UserDetails userDetails =
-                (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        String username = userDetails.getUsername();
         boolean isPasswordSuccessfullyChanged = userService.changePassword(username, passwordChangeDTO);
 
         if (isPasswordSuccessfullyChanged) {
@@ -50,12 +44,9 @@ public class UserController {
 
     @PutMapping("/change_name")
     public ResponseEntity<?> changeName(@RequestBody @Valid NameChangeDTO nameChangeDTO) {
-        UserDetails userDetails =
-                (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        String username = userDetails.getUsername();
         userService.changeName(username, nameChangeDTO);
-
         return ResponseEntity.ok("Name changed successfully.");
     }
 
