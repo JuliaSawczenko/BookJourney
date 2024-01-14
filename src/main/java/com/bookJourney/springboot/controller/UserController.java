@@ -30,32 +30,6 @@ public class UserController {
         this.authenticationService = authenticationService;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody @Valid RegistrationRequestDTO registrationRequestDTO) throws UserAlreadyExistsException {
-        userService.register(registrationRequestDTO);
-        return ResponseEntity.ok("User registered successfully");
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid LoginDTO loginDTO) {
-        try {
-            authenticationService.authenticateUser(loginDTO);
-            return ResponseEntity.ok("Login successful.");
-        }  catch (BadCredentialsException e) {
-            return new ResponseEntity<>("Incorrect password or username.", HttpStatus.UNAUTHORIZED);
-        }
-    }
-
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
-            new SecurityContextLogoutHandler().logout(request, response, authentication);
-        }
-        return ResponseEntity.ok("Logged out successfully.");
-
-    }
-
     @GetMapping("/profile")
     public ResponseEntity<ProfileDTO> seeProfile(Principal principal) {
         String username = principal.getName();
