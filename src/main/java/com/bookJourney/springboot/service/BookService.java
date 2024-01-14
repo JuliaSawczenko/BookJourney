@@ -9,11 +9,16 @@ import com.bookJourney.springboot.entity.User;
 import com.bookJourney.springboot.mapper.BookMapper;
 import com.bookJourney.springboot.repository.BookDetailRepository;
 import com.bookJourney.springboot.repository.BookRepository;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+
+@RequiredArgsConstructor
 @Service
 public class BookService {
 
@@ -24,16 +29,6 @@ public class BookService {
     private final GoogleBooksService googleBooksService;
     private final MoodDataService moodDataService;
     private final BookMapper mapper = Mappers.getMapper(BookMapper.class);
-
-
-    public BookService(BookRepository bookRepository, UserService userService, ReviewService reviewService, GoogleBooksService googleBooksService, MoodDataService moodDataService, BookDetailRepository bookDetailRepository) {
-        this.bookRepository = bookRepository;
-        this.userService = userService;
-        this.reviewService = reviewService;
-        this.googleBooksService = googleBooksService;
-        this.moodDataService = moodDataService;
-        this.bookDetailRepository = bookDetailRepository;
-    }
 
 
     public void addBook(BookDTO bookDTO, String username) throws BookNotFoundException, BookAlreadyExistsException {

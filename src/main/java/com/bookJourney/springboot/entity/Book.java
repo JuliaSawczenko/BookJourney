@@ -14,22 +14,6 @@ import java.util.Set;
 @Table(name = "books")
 public class Book {
 
-    public Book(User user, BookDetail bookDetail, BookStatus status, boolean favourite, LocalDate startDate, LocalDate endDate) {
-        this.user = user;
-        this.bookDetail = bookDetail;
-        this.status = status;
-        this.favourite = favourite;
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
-
-    public Book(User user, BookStatus status, boolean favourite, LocalDate startDate, LocalDate endDate) {
-        this.user = user;
-        this.status = status;
-        this.favourite = favourite;
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
@@ -63,4 +47,20 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "mood_id"))
     private Set<Mood> moodsAssigned = new LinkedHashSet<>();
 
+    public Book(User user, BookDetail bookDetail, BookStatus status, boolean favourite, LocalDate startDate, LocalDate endDate) {
+        this.user = user;
+        this.bookDetail = bookDetail;
+        this.status = status;
+        this.favourite = favourite;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    public Book(User user, BookStatus status, boolean favourite, LocalDate startDate, LocalDate endDate) {
+        this.user = user;
+        this.status = status;
+        this.favourite = favourite;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 }

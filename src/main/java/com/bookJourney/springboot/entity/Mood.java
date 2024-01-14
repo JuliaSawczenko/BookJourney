@@ -14,10 +14,6 @@ import java.util.Set;
 @Table(name = "moods")
 public class Mood {
 
-    public Mood(String description) {
-        this.description = description;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
@@ -29,5 +25,7 @@ public class Mood {
     @ManyToMany(mappedBy = "moodsAssigned")
     private Set<Book> booksAssigned = new LinkedHashSet<>();
 
-
+    public Mood(String description) {
+        this.description = description;
+    }
 }

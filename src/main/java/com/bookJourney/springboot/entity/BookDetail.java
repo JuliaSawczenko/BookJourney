@@ -13,20 +13,6 @@ import java.util.List;
 @Table(name = "book_details")
 public class BookDetail {
 
-    public BookDetail(String title, String author, String isbn, String description, String publishedDate, String imageUrl) {
-        this.title = title;
-        this.author = author;
-        this.isbn = isbn;
-        this.description = description;
-        this.publishedDate = publishedDate;
-        this.imageUrl = imageUrl;
-    }
-
-    public BookDetail(String title, String author) {
-        this.title = title;
-        this.author = author;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
@@ -47,9 +33,23 @@ public class BookDetail {
     @Column
     private String publishedDate;
 
-    @Column(length = 1000000)
+    @Column(length = 100000000)
     private String imageUrl;
 
     @OneToMany(mappedBy = "bookDetail", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Book> books = new ArrayList<>();
+
+    public BookDetail(String title, String author, String isbn, String description, String publishedDate, String imageUrl) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.description = description;
+        this.publishedDate = publishedDate;
+        this.imageUrl = imageUrl;
+    }
+
+    public BookDetail(String title, String author) {
+        this.title = title;
+        this.author = author;
+    }
 }

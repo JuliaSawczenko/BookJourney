@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("book")
+@RequestMapping("/book")
 public class BookController {
 
     private BookService bookService;
@@ -24,7 +24,7 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    @PostMapping("addBook")
+    @PostMapping("/add")
     public ResponseEntity<?> addBook(@RequestBody @Valid BookDTO bookDTO, Principal principal) throws BookNotFoundException, BookAlreadyExistsException {
         String username = principal.getName();
         bookService.addBook(bookDTO, username);
