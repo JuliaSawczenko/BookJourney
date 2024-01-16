@@ -18,7 +18,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
@@ -35,16 +37,16 @@ public class BookServiceTest {
     @Mock
     private BookDetailRepository bookDetailRepository;
 
-    @Mock
+    @MockBean
     private UserService userService;
 
-    @Mock
+    @MockBean
     private ReviewService reviewService;
 
-    @Mock
+    @MockBean
     private GoogleBooksService googleBooksService;
 
-    @Mock
+    @MockBean
     private MoodDataService moodDataService;
 
     @Mock
@@ -52,6 +54,7 @@ public class BookServiceTest {
 
     @InjectMocks
     private BookService bookService;
+
 
     @Test
     @DisplayName("Should successfully add a new book")

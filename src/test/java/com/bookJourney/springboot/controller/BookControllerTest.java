@@ -1,10 +1,14 @@
 package com.bookJourney.springboot.controller;
 
 import com.bookJourney.springboot.config.BookAlreadyExistsException;
+import com.bookJourney.springboot.repository.RoleRepository;
+import com.bookJourney.springboot.security.AuthEntryPointJwt;
+import com.bookJourney.springboot.security.JwtUtils;
 import com.bookJourney.springboot.security.SecurityConfig;
 import com.bookJourney.springboot.dto.BookDTO;
 import com.bookJourney.springboot.mocks.BookDTOMock;
 import com.bookJourney.springboot.service.BookService;
+import com.bookJourney.springboot.service.UserDetailsServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -32,6 +37,22 @@ public class BookControllerTest {
     @MockBean
     private BookService bookService;
 
+    @MockBean
+    private UserDetailsServiceImpl userDetailsService;
+
+    @MockBean
+    private AuthenticationManager authenticationManager;
+
+    @MockBean
+    private AuthEntryPointJwt authEntryPointJwt;
+
+    @MockBean
+    private RoleRepository roleRepository;
+
+    @MockBean
+    private JwtUtils jwtUtils;
+
+
     @Test
     @WithMockUser(username = "testUser")
     @DisplayName("POST /book/addBook adds a book successfully")
@@ -40,7 +61,7 @@ public class BookControllerTest {
         BookDTO bookDTO = BookDTOMock.getBookDTOforReadingStatus();
 
         // When & Then
-        mockMvc.perform(post("/book/addBook")
+        mockMvc.perform(post("/book/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(bookDTO)))
                 .andExpect(status().isOk())
@@ -60,7 +81,7 @@ public class BookControllerTest {
         doThrow(BookAlreadyExistsException.class).when(bookService).addBook(any(BookDTO.class), eq("testUser"));
 
         // Then
-        mockMvc.perform(post("/book/addBook")
+        mockMvc.perform(post("/book/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(bookDTO)))
                 .andExpect(status().isBadRequest())
