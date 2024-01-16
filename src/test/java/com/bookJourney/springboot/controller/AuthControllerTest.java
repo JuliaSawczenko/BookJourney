@@ -12,7 +12,6 @@ import com.bookJourney.springboot.repository.UserRepository;
 import com.bookJourney.springboot.security.AuthEntryPointJwt;
 import com.bookJourney.springboot.security.JwtUtils;
 import com.bookJourney.springboot.security.SecurityConfig;
-import com.bookJourney.springboot.security.WebConfig;
 import com.bookJourney.springboot.service.UserDetailsServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -36,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(AuthController.class)
-@Import(WebConfig.class)
+@Import(SecurityConfig.class)
 public class AuthControllerTest {
 
 
