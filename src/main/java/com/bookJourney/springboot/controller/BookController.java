@@ -5,7 +5,6 @@ import com.bookJourney.springboot.config.BookNotFoundException;
 import com.bookJourney.springboot.dto.BookDTO;
 import com.bookJourney.springboot.service.BookService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

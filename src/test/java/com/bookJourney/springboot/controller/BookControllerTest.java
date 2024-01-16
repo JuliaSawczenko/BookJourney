@@ -4,6 +4,7 @@ import com.bookJourney.springboot.config.BookAlreadyExistsException;
 import com.bookJourney.springboot.config.SecurityConfig;
 import com.bookJourney.springboot.dto.BookDTO;
 import com.bookJourney.springboot.mocks.BookDTOMock;
+import com.bookJourney.springboot.security.WebConfig;
 import com.bookJourney.springboot.service.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(BookController.class)
-@Import(SecurityConfig.class)
+@Import(WebConfig.class)
 public class BookControllerTest {
 
     @Autowired

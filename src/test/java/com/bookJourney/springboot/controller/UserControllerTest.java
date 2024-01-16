@@ -8,6 +8,7 @@ import com.bookJourney.springboot.repository.RoleRepository;
 import com.bookJourney.springboot.security.AuthEntryPointJwt;
 import com.bookJourney.springboot.security.JwtUtils;
 import com.bookJourney.springboot.security.SecurityConfig;
+import com.bookJourney.springboot.security.WebConfig;
 import com.bookJourney.springboot.service.UserDetailsServiceImpl;
 import com.bookJourney.springboot.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,7 +30,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserController.class)
-@Import(SecurityConfig.class)
+@Import(WebConfig.class)
 class UserControllerTest {
 
     @Autowired
