@@ -7,20 +7,24 @@ import com.bookJourney.springboot.entity.Book;
 import com.bookJourney.springboot.entity.BookDetail;
 import com.bookJourney.springboot.entity.User;
 import com.bookJourney.springboot.mapper.BookMapper;
+import com.bookJourney.springboot.mapper.UserMapper;
 import com.bookJourney.springboot.mocks.BookDTOMock;
 import com.bookJourney.springboot.mocks.BookDetailMock;
 import com.bookJourney.springboot.mocks.BookMock;
 import com.bookJourney.springboot.mocks.UserMock;
 import com.bookJourney.springboot.repository.BookDetailRepository;
 import com.bookJourney.springboot.repository.BookRepository;
+import com.bookJourney.springboot.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
@@ -29,13 +33,17 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
+@SpringBootTest
 public class BookServiceTest {
 
-    @Mock
+    @MockBean
     private BookRepository bookRepository;
 
-    @Mock
+    @MockBean
     private BookDetailRepository bookDetailRepository;
+
+    @MockBean
+    private UserRepository userRepository;
 
     @MockBean
     private UserService userService;
@@ -49,12 +57,11 @@ public class BookServiceTest {
     @MockBean
     private MoodDataService moodDataService;
 
-    @Mock
+    @MockBean
     private BookMapper bookMapper;
 
-    @InjectMocks
+    @Autowired
     private BookService bookService;
-
 
     @Test
     @DisplayName("Should successfully add a new book")
@@ -66,6 +73,8 @@ public class BookServiceTest {
         Book book = BookMock.getBasicBookWithBookDetail(user, bookDetail);
 
         // When
+        when(userRepository.findUserByUsername(anyString())).thenReturn(Optional.of(user));
+        when(userService.getUserByUsername(anyString())).thenReturn(user);
         when(googleBooksService.getBookDetails(bookDTO.title(), bookDTO.author())).thenReturn(bookDetail);
         when(bookDetailRepository.save(any(BookDetail.class))).thenReturn(bookDetail);
         bookService.addBook(bookDTO, user.getUsername());

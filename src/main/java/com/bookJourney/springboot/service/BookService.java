@@ -10,7 +10,6 @@ import com.bookJourney.springboot.mapper.BookMapper;
 import com.bookJourney.springboot.repository.BookDetailRepository;
 import com.bookJourney.springboot.repository.BookRepository;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
