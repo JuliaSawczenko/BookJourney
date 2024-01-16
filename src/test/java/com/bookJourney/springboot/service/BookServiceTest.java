@@ -1,4 +1,4 @@
-/* package com.bookJourney.springboot.service;
+package com.bookJourney.springboot.service;
 
 import com.bookJourney.springboot.config.BookAlreadyExistsException;
 import com.bookJourney.springboot.config.BookNotFoundException;
@@ -63,7 +63,7 @@ public class BookServiceTest {
     @Autowired
     private BookService bookService;
 
-    /*
+
     @Test
     @DisplayName("Should successfully add a new book")
     public void addBook_success() throws BookNotFoundException, BookAlreadyExistsException {
@@ -101,4 +101,3 @@ public class BookServiceTest {
         assertThrows(BookAlreadyExistsException.class, () -> bookService.addBook(bookDTO, user.getUsername()));
     }
 }
-*/
