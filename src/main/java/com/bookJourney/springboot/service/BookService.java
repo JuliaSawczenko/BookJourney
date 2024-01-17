@@ -29,7 +29,7 @@ public class BookService {
     private final BookMapper mapper = Mappers.getMapper(BookMapper.class);
 
 
-    public void addBook(BookDTO bookDTO, String username) throws BookNotFoundException, BookAlreadyExistsException {
+    public int addBook(BookDTO bookDTO, String username) throws BookNotFoundException, BookAlreadyExistsException {
         User user = userService.getUserByUsername(username);
 
         if (checkIfBookExists(bookDTO.title(), bookDTO.author(), user)) {
@@ -44,6 +44,7 @@ public class BookService {
         book.setBookDetail(bookDetail);
         bookRepository.save(book);
         handleBookStatus(bookDTO, user, book);
+        return book.getId();
     }
 
 
@@ -67,7 +68,7 @@ public class BookService {
         switch (book.getStatus()) {
             case READ:
                 if (bookDTO.review() != null) {
-                    reviewService.addReview(bookDTO.review(), book, user);
+                    reviewService.addReviewToNewBook(bookDTO.review(), book, user);
                 }
                 if (bookDTO.moods() != null) {
                     moodDataService.submitFinalMoods(bookDTO.moods());

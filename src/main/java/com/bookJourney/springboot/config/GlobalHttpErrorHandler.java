@@ -16,6 +16,6 @@ public class GlobalHttpErrorHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BookNotFoundException.class)
     public ResponseEntity<Object> handleBookNotFoundException(BookNotFoundException exception) {
-        return new ResponseEntity<>("Not able to find a book with given title and author", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Not able to find the book.", HttpStatus.BAD_REQUEST);
     }
 }
