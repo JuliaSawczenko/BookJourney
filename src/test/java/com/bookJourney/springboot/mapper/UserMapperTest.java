@@ -25,8 +25,7 @@ public class UserMapperTest {
 
         //Then
         assertEquals(USERNAME, user.getUsername());
-        assertEquals(FIRST_NAME, user.getFirstName());
-        assertEquals(LAST_NAME, user.getLastName());
+        assertEquals(EMAIL, user.getEmail());
     }
 
     @Test

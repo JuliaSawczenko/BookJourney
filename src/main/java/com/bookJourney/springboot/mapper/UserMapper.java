@@ -18,7 +18,10 @@ public interface UserMapper {
     @Mapping(target = "books", ignore = true)
     @Mapping(target = "moodTrackers", ignore = true)
     @Mapping(target = "password", ignore = true)
+    @Mapping(target = "firstName", ignore = true)
+    @Mapping(target = "lastName", ignore = true)
     @Mapping(target = "roles", ignore = true)
+
     User registrationRequestDTOtoUser(RegistrationRequestDTO dto);
 
     ProfileDTO userToProfileDTO(User user);
