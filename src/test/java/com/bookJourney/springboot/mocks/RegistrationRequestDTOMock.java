@@ -8,6 +8,6 @@ public class RegistrationRequestDTOMock {
     private RegistrationRequestDTOMock() {}
 
     public static RegistrationRequestDTO getBasicRegistrationRequestDTO() {
-    return new RegistrationRequestDTO(USERNAME, "00000000", EMAIL, FIRST_NAME, LAST_NAME);
+    return new RegistrationRequestDTO(USERNAME, "00000000", EMAIL);
 }
 }
