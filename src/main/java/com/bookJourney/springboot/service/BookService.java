@@ -67,16 +67,16 @@ public class BookService {
     private void handleBookStatus(BookDTO bookDTO, User user, Book book) {
         switch (book.getStatus()) {
             case READ:
-                if (bookDTO.review() != null) {
-                    reviewService.addReviewToNewBook(bookDTO.review(), book, user);
+                if (bookDTO.finalFeedback().review() != null) {
+                    reviewService.addReview(bookDTO.finalFeedback().review(), book, user);
                 }
-                if (bookDTO.moods() != null) {
-                    moodDataService.submitFinalMoods(bookDTO.moods());
+                if (bookDTO.finalFeedback().moods() != null) {
+                    moodDataService.submitFinalMoods(bookDTO.finalFeedback().moods(), book, user);
                 }
                 break;
             case READING:
                 if (bookDTO.mood() != null) {
-                    moodDataService.addCurrentMood(bookDTO.mood());
+                    moodDataService.addCurrentMood(bookDTO.mood(), book, user);
                 }
                 break;
             case GOING_TO_READ:

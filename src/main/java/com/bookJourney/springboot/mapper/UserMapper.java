@@ -17,7 +17,6 @@ public interface UserMapper {
     @Mapping(target = "lastLogin", ignore = true)
     @Mapping(target = "books", ignore = true)
     @Mapping(target = "reviews", ignore = true)
-    @Mapping(target = "moodTrackers", ignore = true)
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "firstName", ignore = true)
     @Mapping(target = "lastName", ignore = true)
@@ -30,6 +29,5 @@ public interface UserMapper {
     default void setDefaultValues(@MappingTarget User user) {
         user.setAccountCreated(LocalDate.now());
         user.setBooks(new ArrayList<>());
-        user.setMoodTrackers(new ArrayList<>());
     }
 }
