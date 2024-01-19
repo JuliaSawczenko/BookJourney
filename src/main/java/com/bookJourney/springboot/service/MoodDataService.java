@@ -91,7 +91,7 @@ public class MoodDataService {
         }
     }
 
-
+// Takes into account all moods for all books for a specific user
         public Map<String, Double> calculateStatisticsForUser(String username) {
             User user = userService.getUserByUsername(username);
             List<UserBookMood> usersMoods = userBookMoodsRepository.findByUser(user);
@@ -99,7 +99,7 @@ public class MoodDataService {
             Map<String, Integer> totalMoodCounts = new HashMap<>();
             Map<String, Integer> totalMoodScores = new HashMap<>();
 
-            // Step 1: Aggregate counts and scores for each mood
+            // Aggregate counts and scores for each mood
             for (UserBookMood moodInstance : usersMoods) {
                 String moodName = moodInstance.getMood().toString();
                 totalMoodCounts.put(moodName, totalMoodCounts.getOrDefault(moodName, 0) + moodInstance.getCountOfMood());
@@ -109,7 +109,7 @@ public class MoodDataService {
             Map<String, Double> weightedMoodScores = new HashMap<>();
             double totalWeightedScore = 0;
 
-            // Step 2 & 3: Calculate weighted score and total weighted score
+            // Calculate weighted score and total weighted score
             for (String mood : totalMoodCounts.keySet()) {
                 double countWeight = totalMoodCounts.get(mood) * WEIGHT_FOR_COUNT;
                 double scoreWeight = (totalMoodScores.get(mood) / (double) MAX_SCORE) * WEIGHT_FOR_SCORE;
@@ -119,7 +119,7 @@ public class MoodDataService {
                 totalWeightedScore += weightedScore;
             }
 
-            // Step 4: Calculate percentage for each mood
+            // Calculate percentage for each mood
             Map<String, Double> moodPercentages = new HashMap<>();
             for (Map.Entry<String, Double> entry : weightedMoodScores.entrySet()) {
                 double percentage = (entry.getValue() / totalWeightedScore) * 100;
