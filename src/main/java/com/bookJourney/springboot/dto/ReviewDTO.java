@@ -9,7 +9,8 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class ReviewDTO {
-    @Min(1) @Max(10)
+    @Min(1)
+    @Max(10)
     private int score;
 
     @NotBlank

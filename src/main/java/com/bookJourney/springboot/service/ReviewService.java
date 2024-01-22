@@ -20,7 +20,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReviewMapper mapper = Mappers.getMapper(ReviewMapper.class);
 
-    void addReview(ReviewDTO reviewDTO, Book book, User user) throws ReviewAlreadyExistsException {
+    public void addReview(ReviewDTO reviewDTO, Book book, User user) throws ReviewAlreadyExistsException {
 
         if (checkIfReviewExists(book, user)) {
             throw new ReviewAlreadyExistsException();

@@ -25,21 +25,21 @@ public class BookController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addBook(@RequestBody @Valid BookDTO bookDTO, Principal principal) throws BookNotFoundException, BookAlreadyExistsException, ReviewAlreadyExistsException {
+    public ResponseEntity<MessageResponse> addBook(@RequestBody @Valid BookDTO bookDTO, Principal principal) throws BookNotFoundException, BookAlreadyExistsException, ReviewAlreadyExistsException {
         String username = principal.getName();
         int bookId = bookService.addBook(bookDTO, username);
         return ResponseEntity.ok(new MessageResponse("Book id is: " + bookId));
     }
 
     @PostMapping("/{bookId}/edit")
-    public ResponseEntity<?> editBook(@PathVariable Integer bookId, @RequestBody @Valid BookDTO bookDTO, Principal principal) throws BookNotFoundException, ReviewAlreadyExistsException {
+    public ResponseEntity<MessageResponse> editBook(@PathVariable Integer bookId, @RequestBody @Valid BookDTO bookDTO, Principal principal) throws BookNotFoundException, ReviewAlreadyExistsException {
         String username = principal.getName();
         bookService.editBook(bookDTO, username, bookId);
-        return ResponseEntity.ok("Book edited successfully");
+        return ResponseEntity.ok(new MessageResponse("Book edited successfully"));
     }
 
     @GetMapping("/{bookId}/details")
-    public ResponseEntity<?> getDetails(@PathVariable Integer bookId, Principal principal) throws BookNotFoundException {
+    public ResponseEntity<BookDetailsDTO> getDetails(@PathVariable Integer bookId, Principal principal) throws BookNotFoundException {
         String username = principal.getName();
         BookDetailsDTO bookDetailsDTO = bookService.getBookDetails(username, bookId);
         return ResponseEntity.ok(bookDetailsDTO);

@@ -1,5 +1,6 @@
 package com.bookJourney.springboot.service;
 
+import com.bookJourney.springboot.dto.MoodsPercentageDTO;
 import com.bookJourney.springboot.entity.Book;
 import com.bookJourney.springboot.entity.EnumMood;
 import com.bookJourney.springboot.entity.User;
@@ -24,7 +25,7 @@ public class MoodDataService {
     private final UserService userService;
 
 
-     void addCurrentMood(EnumMood mood, Book book, User user) {
+     public void addCurrentMood(EnumMood mood, Book book, User user) {
         Optional<UserBookMood> specificMoodOptional = userBookMoodsRepository.findByUserAndBookAndMood(user, book, mood);
 
         if (specificMoodOptional.isPresent()) {
@@ -43,12 +44,12 @@ public class MoodDataService {
     }
 
 
-    void submitFinalMoods(HashMap<EnumMood, Integer> moods, Book book, User user) {
+    void submitFinalMoods(MoodsPercentageDTO moods, Book book, User user) {
         List<UserBookMood> presentMoods = userBookMoodsRepository.findByUserAndBook(user, book);
 
-        for (Map.Entry<EnumMood, Integer> entry : moods.entrySet()) {
+        for (Map.Entry<EnumMood, Double> entry : moods.moodsPercentages().entrySet()) {
             EnumMood mood = entry.getKey();
-            int score = entry.getValue();
+            Double score = entry.getValue();
 
             Optional<UserBookMood> matchingMood = presentMoods.stream()
                     .filter(userBookMood -> userBookMood.getMood().equals(mood))
@@ -70,18 +71,18 @@ public class MoodDataService {
     }
 
 // Takes into account all moods for all books for a specific user
-        public Map<String, Double> calculateStatisticsForUser(String username) {
+        public MoodsPercentageDTO calculateStatisticsForUser(String username) {
             User user = userService.getUserByUsername(username);
             List<UserBookMood> usersMoods = userBookMoodsRepository.findByUser(user);
 
-            Map<String, Integer> totalMoodCounts = new HashMap<>();
-            Map<String, Integer> totalMoodScores = new HashMap<>();
+            Map<String, Double> totalMoodCounts = new HashMap<>();
+            Map<String, Double> totalMoodScores = new HashMap<>();
 
             // Aggregate counts and scores for each mood
             for (UserBookMood moodInstance : usersMoods) {
                 String moodName = moodInstance.getMood().toString();
-                totalMoodCounts.put(moodName, totalMoodCounts.getOrDefault(moodName, 0) + moodInstance.getCountOfMood());
-                totalMoodScores.put(moodName, totalMoodScores.getOrDefault(moodName, 0) + moodInstance.getScoreOfMood());
+                totalMoodCounts.put(moodName, totalMoodCounts.getOrDefault(moodName, 0.0) + moodInstance.getCountOfMood());
+                totalMoodScores.put(moodName, totalMoodScores.getOrDefault(moodName, 0.0) + moodInstance.getScoreOfMood());
             }
 
             Map<String, Double> weightedMoodScores = new HashMap<>();
@@ -98,13 +99,13 @@ public class MoodDataService {
             }
 
             // Calculate percentage for each mood
-            Map<String, Double> moodPercentages = new HashMap<>();
+            Map<EnumMood, Double> moodPercentages = new HashMap<>();
             for (Map.Entry<String, Double> entry : weightedMoodScores.entrySet()) {
                 double percentage = (entry.getValue() / totalWeightedScore) * 100;
-                moodPercentages.put(entry.getKey(), percentage);
+                moodPercentages.put(EnumMood.valueOf(entry.getKey()), percentage);
             }
 
-            return moodPercentages;
+            return new MoodsPercentageDTO(moodPercentages);
         }
     }
 

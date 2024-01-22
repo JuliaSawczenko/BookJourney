@@ -31,7 +31,7 @@ public class UserBookMood {
     private int countOfMood;
 
     @Column
-    private int scoreOfMood;
+    private Double scoreOfMood;
 
     public void incrementCount() {
         this.countOfMood++;
