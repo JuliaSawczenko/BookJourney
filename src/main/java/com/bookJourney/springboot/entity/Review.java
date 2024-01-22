@@ -27,7 +27,7 @@ public class Review {
     private User user;
 
     @Column
-    private int rating;
+    private Integer score;
 
     @Column
     private String comment;

@@ -1,12 +1,11 @@
 package com.bookJourney.springboot.service;
 
-import com.bookJourney.springboot.config.BookNotFoundException;
+import com.bookJourney.springboot.config.ReviewAlreadyExistsException;
 import com.bookJourney.springboot.dto.ReviewDTO;
 import com.bookJourney.springboot.entity.Book;
 import com.bookJourney.springboot.entity.Review;
 import com.bookJourney.springboot.entity.User;
 import com.bookJourney.springboot.mapper.ReviewMapper;
-import com.bookJourney.springboot.repository.BookRepository;
 import com.bookJourney.springboot.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
@@ -18,26 +17,28 @@ import java.util.Optional;
 @Service
 public class ReviewService {
 
-    private final UserService userService;
     private final ReviewRepository reviewRepository;
-    private final BookRepository bookRepository;
     private final ReviewMapper mapper = Mappers.getMapper(ReviewMapper.class);
 
+    void addReview(ReviewDTO reviewDTO, Book book, User user) throws ReviewAlreadyExistsException {
 
-    public void addReviewToExistingBook(Integer bookId, ReviewDTO reviewDTO, String username) throws BookNotFoundException {
-        User user = userService.getUserByUsername(username);
-        Optional<Book> book = bookRepository.findById(bookId);
-        if (book.isPresent()) {
-            addReview(reviewDTO, book.get(), user);
-        } else {
-            throw new BookNotFoundException();
+        if (checkIfReviewExists(book, user)) {
+            throw new ReviewAlreadyExistsException();
         }
-    }
 
-    void addReview(ReviewDTO reviewDTO, Book book, User user) {
         Review review = mapper.reviewDTOtoReview(reviewDTO);
         review.setUser(user);
         review.setBook(book);
         reviewRepository.save(review);
     }
+
+    ReviewDTO getReviewOfBook(Book book, User user) {
+        Optional<Review> review = reviewRepository.findByBookAndUser(book, user);
+        return review.map(value -> new ReviewDTO(value.getScore(), value.getComment())).orElseGet(() -> new ReviewDTO(0, ""));
+    }
+
+    private boolean checkIfReviewExists(Book book, User user) {
+        return reviewRepository.findByBookAndUser(book, user).isPresent();
+    }
+
 }

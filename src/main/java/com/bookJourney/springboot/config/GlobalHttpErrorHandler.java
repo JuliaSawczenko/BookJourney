@@ -18,4 +18,10 @@ public class GlobalHttpErrorHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleBookNotFoundException(BookNotFoundException exception) {
         return new ResponseEntity<>("Not able to find the book.", HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ReviewAlreadyExistsException.class)
+    public ResponseEntity<Object> handleReviewAlreadyExistsException(ReviewAlreadyExistsException exception) {
+        return new ResponseEntity<>("Review for a given book already exists.", HttpStatus.BAD_REQUEST);
+    }
+
 }

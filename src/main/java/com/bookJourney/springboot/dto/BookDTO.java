@@ -2,14 +2,16 @@ package com.bookJourney.springboot.dto;
 
 import com.bookJourney.springboot.entity.BookStatus;
 import com.bookJourney.springboot.entity.EnumMood;
-import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 
-public record BookDTO(@NotBlank String title,
-                      @NotBlank String author,
+public record BookDTO(String title,
+                      String author,
                       BookStatus status,
-                      FinalFeedbackDTO finalFeedback,
+                      ReviewDTO review,
+                      HashMap<EnumMood, Integer> moods,
                       EnumMood mood,
-                      LocalDate startDate) {
+                      LocalDate startDate,
+                      LocalDate endDate) {
 }

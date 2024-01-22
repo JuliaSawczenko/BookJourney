@@ -72,7 +72,7 @@ public class BookControllerTest {
 
     @Test
     @WithMockUser(username = "testUser")
-    @DisplayName("POST /book/addBook throws BookAlreadyExistsExceptio (400) if a given user already has the book")
+    @DisplayName("POST /book/addBook throws BookAlreadyExistsException (400) if a given user already has the book")
     void addBook_failure() throws Exception {
         // Given
         BookDTO bookDTO = BookDTOMock.getBookDTOforReadingStatus();

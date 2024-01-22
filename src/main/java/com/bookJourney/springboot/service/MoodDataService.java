@@ -1,11 +1,9 @@
 package com.bookJourney.springboot.service;
 
-import com.bookJourney.springboot.config.BookNotFoundException;
 import com.bookJourney.springboot.entity.Book;
 import com.bookJourney.springboot.entity.EnumMood;
 import com.bookJourney.springboot.entity.User;
 import com.bookJourney.springboot.entity.UserBookMood;
-import com.bookJourney.springboot.repository.BookRepository;
 import com.bookJourney.springboot.repository.UserBookMoodsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,18 +22,7 @@ public class MoodDataService {
 
     private final UserBookMoodsRepository userBookMoodsRepository;
     private final UserService userService;
-    private final BookRepository bookRepository;
 
-
-    public void addCurrentMoodToExistingBook(Integer bookId, EnumMood mood, String username) throws BookNotFoundException {
-        User user = userService.getUserByUsername(username);
-        Optional<Book> book = bookRepository.findById(bookId);
-        if (book.isPresent()) {
-            addCurrentMood(mood, book.get(), user);
-        } else {
-            throw new BookNotFoundException();
-        }
-    }
 
      void addCurrentMood(EnumMood mood, Book book, User user) {
         Optional<UserBookMood> specificMoodOptional = userBookMoodsRepository.findByUserAndBookAndMood(user, book, mood);
@@ -55,15 +42,6 @@ public class MoodDataService {
         }
     }
 
-    public void submitFinalMoodsToExistingBook(HashMap<EnumMood, Integer> moods, Integer bookId, String username) throws BookNotFoundException {
-        User user = userService.getUserByUsername(username);
-        Optional<Book> book = bookRepository.findById(bookId);
-        if (book.isPresent()) {
-            submitFinalMoods(moods, book.get(), user);
-        } else {
-            throw new BookNotFoundException();
-        }
-    }
 
     void submitFinalMoods(HashMap<EnumMood, Integer> moods, Book book, User user) {
         List<UserBookMood> presentMoods = userBookMoodsRepository.findByUserAndBook(user, book);
