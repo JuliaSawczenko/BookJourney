@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,7 +47,7 @@ public class AuthController {
     private final UserMapper mapper = Mappers.getMapper(UserMapper.class);
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid LoginDTO loginDTO) {
+    public ResponseEntity<UserInfoResponse> login(@RequestBody @Valid LoginDTO loginDTO) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.username(), loginDTO.password())
@@ -58,7 +59,7 @@ public class AuthController {
         String jwt = jwtUtil.generateTokenFromUsername(userDetails.getUsername());
 
         List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
+                .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(new UserInfoResponse(
@@ -72,7 +73,7 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody @Valid RegistrationRequestDTO registrationRequestDTO) {
+    public ResponseEntity<MessageResponse> register(@RequestBody @Valid RegistrationRequestDTO registrationRequestDTO) {
         if (userRepository.existsByUsername(registrationRequestDTO.username())) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
         }
@@ -95,7 +96,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logoutUser() {
+    public ResponseEntity<MessageResponse> logoutUser() {
         return ResponseEntity.ok(new MessageResponse("You've been signed out!"));
     }
 }

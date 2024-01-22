@@ -14,7 +14,7 @@ public class BookMock {
     }
 
     public static Book getBasicBookWithBookDetail(User user, BookDetail bookDetail) {
-       return new Book(user, bookDetail, STATUS, false, LOCAL_DATE, LOCAL_DATE);
+        return new Book(user, bookDetail, STATUS, false, LOCAL_DATE, LOCAL_DATE);
     }
 
     public static Book getBasicBook(User user) {

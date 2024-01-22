@@ -10,6 +10,6 @@ public class BookDTOMock {
     }
 
     public static BookDTO getBookDTOforReadingStatus() {
-        return new BookDTO(TITLE, AUTHOR, STATUS, null, MOOD, null, null);
+        return new BookDTO(TITLE, AUTHOR, STATUS, null, null,  MOOD, null, null);
     }
 }

@@ -2,6 +2,7 @@ package com.bookJourney.springboot.service;
 
 import com.bookJourney.springboot.config.BookAlreadyExistsException;
 import com.bookJourney.springboot.config.BookNotFoundException;
+import com.bookJourney.springboot.config.ReviewAlreadyExistsException;
 import com.bookJourney.springboot.dto.BookDTO;
 import com.bookJourney.springboot.entity.Book;
 import com.bookJourney.springboot.entity.BookDetail;
@@ -18,7 +19,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 
 import java.util.Optional;
 
@@ -26,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 public class BookServiceTest {
 
     @Mock
@@ -55,12 +57,13 @@ public class BookServiceTest {
 
     @Test
     @DisplayName("Should successfully add a new book")
-    public void addBook_success() throws BookNotFoundException, BookAlreadyExistsException {
+    public void addBook_success() throws BookNotFoundException, BookAlreadyExistsException, ReviewAlreadyExistsException {
         // Given
         User user = UserMock.getBasicUser();
         BookDTO bookDTO = BookDTOMock.getBookDTOforReadingStatus();
         BookDetail bookDetail = BookDetailMock.getBasicBookDetail();
         Book book = BookMock.getBasicBookWithBookDetail(user, bookDetail);
+        book.setId(1);
 
         // When
         when(googleBooksService.getBookDetails(bookDTO.title(), bookDTO.author())).thenReturn(bookDetail);

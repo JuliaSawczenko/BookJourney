@@ -1,6 +1,7 @@
 package com.bookJourney.springboot.mocks;
 
 import com.bookJourney.springboot.entity.BookStatus;
+import com.bookJourney.springboot.entity.EnumMood;
 
 import java.time.LocalDate;
 
@@ -16,5 +17,5 @@ public class MockedValues {
     public static final String AUTHOR = "Jack Higgins";
     public static final String TITLE = "Night of the Fox";
     public static final BookStatus STATUS = READING;
-    public static final String MOOD = "Happy";
+    public static final EnumMood MOOD = EnumMood.HAPPY;
 }

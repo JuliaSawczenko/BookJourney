@@ -57,7 +57,7 @@ public class User {
     private List<Book> books = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MoodTracker> moodTrackers = new ArrayList<>();
+    private List<Review> reviews = new ArrayList<>();
 
     public User(String username, String email, String password) {
         this.username = username;

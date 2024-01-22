@@ -1,5 +1,6 @@
 package com.bookJourney.springboot.controller;
 
+import com.bookJourney.springboot.dto.MessageResponse;
 import com.bookJourney.springboot.dto.NameChangeDTO;
 import com.bookJourney.springboot.dto.PasswordChangeDTO;
 import com.bookJourney.springboot.dto.ProfileDTO;
@@ -36,9 +37,9 @@ public class UserController {
         boolean isPasswordSuccessfullyChanged = userService.changePassword(username, passwordChangeDTO);
 
         if (isPasswordSuccessfullyChanged) {
-            return ResponseEntity.ok("Password changed successfully.");
+            return ResponseEntity.ok(new MessageResponse("Password changed successfully."));
         }
-        return new ResponseEntity<>("Current password not correct", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new MessageResponse("Current password not correct"), HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/change_name")
@@ -46,7 +47,7 @@ public class UserController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         userService.changeName(username, nameChangeDTO);
-        return ResponseEntity.ok("Name changed successfully.");
+        return ResponseEntity.ok(new MessageResponse("Name changed successfully."));
     }
 
 
