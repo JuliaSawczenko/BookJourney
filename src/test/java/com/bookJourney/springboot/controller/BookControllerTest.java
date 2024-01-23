@@ -60,12 +60,17 @@ public class BookControllerTest {
         // Given
         BookDTO bookDTO = BookDTOMock.getBookDTOforReadingStatus();
 
-        // When & Then
+        // When
+        when(bookService.addBook(any(BookDTO.class), eq("testUser"))).thenReturn(1);
+        String expectedResponse = "{\"message\":\"Book id is: 1\"}";
+
+
+        // Then
         mockMvc.perform(post("/book/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(bookDTO)))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Book added successfully"));
+                .andExpect(content().json(expectedResponse));
 
         verify(bookService, times(1)).addBook(bookDTO, "testUser");
     }

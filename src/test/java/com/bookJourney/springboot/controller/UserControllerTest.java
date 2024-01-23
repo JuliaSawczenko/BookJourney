@@ -86,13 +86,15 @@ class UserControllerTest {
 
         //When
         when(userService.changePassword(eq("testUser"), any(PasswordChangeDTO.class))).thenReturn(true);
+        String expectedResponse = "{\"message\":\"Password changed successfully.\"}";
+
 
         //Then
         mockMvc.perform(put("/user/change_password")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(passwordChangeDTO)))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Password changed successfully."));
+                        .andExpect(status().isOk())
+                        .andExpect(content().json(expectedResponse));
     }
 
     @Test
@@ -104,13 +106,15 @@ class UserControllerTest {
 
         //When
         when(userService.changePassword(eq("testUser"), any(PasswordChangeDTO.class))).thenReturn(false);
+        String expectedResponse = "{\"message\":\"Current password not correct\"}";
+
 
         //Then
         mockMvc.perform(put("/user/change_password")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(passwordChangeDTO)))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("Current password not correct"));
+                .andExpect(content().json(expectedResponse));
 
     }
 
@@ -125,13 +129,15 @@ class UserControllerTest {
 
         //When
         doNothing().when(userService).changeName(eq(username), any(NameChangeDTO.class));
+        String expectedResponse = "{\"message\":\"Name changed successfully.\"}";
+
 
         //Then
         mockMvc.perform(put("/user/change_name")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(nameChangeDTO)))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Name changed successfully."));
+                .andExpect(content().json(expectedResponse));
 
         verify(userService, times(1)).changeName(eq(username), any(NameChangeDTO.class));
     }
