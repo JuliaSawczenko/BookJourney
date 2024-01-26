@@ -31,6 +31,10 @@ public class BookService {
     private final BookMapper mapper = Mappers.getMapper(BookMapper.class);
 
 
+    public Optional<Book> getBookById(Integer bookId, User user) {
+        return bookRepository.findByIdAndUser(bookId, user);
+    }
+
     public int addBook(BookDTO bookDTO, String username) throws BookNotFoundException, BookAlreadyExistsException, ReviewAlreadyExistsException {
         User user = userService.getUserByUsername(username);
 
@@ -56,8 +60,7 @@ public class BookService {
 
     public void editBook(BookDTO bookDTO, String username, Integer bookId) throws BookNotFoundException, ReviewAlreadyExistsException {
         User user = userService.getUserByUsername(username);
-
-        Optional<Book> book = bookRepository.findByIdAndUser(bookId, user);
+        Optional<Book> book = getBookById(bookId, user);
         if (book.isPresent()) {
             handleBookStatus(bookDTO, user, book.get());
         } else {
@@ -68,11 +71,11 @@ public class BookService {
     public BookDetailsDTO getBookDetails(String username, Integer bookId) throws BookNotFoundException {
         User user = userService.getUserByUsername(username);
 
-        Optional<Book> book = bookRepository.findByIdAndUser(bookId, user);
+        Optional<Book> book = getBookById(bookId, user);
         if (book.isPresent()) {
             BookDetailsDTO bookDetailsDTO = mapper.toBookDetailsDTO(book.get());
             bookDetailsDTO.setReview(reviewService.getReviewOfBook(book.get(), user));
-            bookDetailsDTO.setMoods(moodDataService.calculateStatisticsForUserAndBook(user, book.get()));
+            bookDetailsDTO.setMoods(moodDataService.calculateStatisticsForUserAndBook(username, bookId));
             return bookDetailsDTO;
         } else {
             throw new BookNotFoundException();
