@@ -15,8 +15,7 @@ public class BookDetailsDTO {
     private String author;
     private BookStatus status;
     private ReviewDTO review;
-    private HashMap<EnumMood, Integer> moods;
-    private BookDTO bookDTO;
+    private MoodsPercentageDTO moods;
     private LocalDate startDate;
     private LocalDate endDate;
     private boolean favourite;

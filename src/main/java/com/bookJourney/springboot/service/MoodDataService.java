@@ -70,16 +70,26 @@ public class MoodDataService {
         }
     }
 
-// Takes into account all moods for all books for a specific user
-        public MoodsPercentageDTO calculateStatisticsForUser(String username) {
-            User user = userService.getUserByUsername(username);
-            List<UserBookMood> usersMoods = userBookMoodsRepository.findByUser(user);
+    // Takes into account moods for a specific books for a specific user
+    public MoodsPercentageDTO calculateStatisticsForUserAndBook(User user, Book book) {
+        List<UserBookMood> usersAndBookMoods = userBookMoodsRepository.findByUserAndBook(user, book);
+        return calculateStatistics(usersAndBookMoods);
+    }
 
+    // Takes into account all moods for all books for a specific user
+    public MoodsPercentageDTO calculateStatisticsForUser(String username) {
+        User user = userService.getUserByUsername(username);
+        List<UserBookMood> usersMoods = userBookMoodsRepository.findByUser(user);
+        return calculateStatistics(usersMoods);
+    }
+
+
+        public MoodsPercentageDTO calculateStatistics(List<UserBookMood> moods) {
             Map<String, Double> totalMoodCounts = new HashMap<>();
             Map<String, Double> totalMoodScores = new HashMap<>();
 
             // Aggregate counts and scores for each mood
-            for (UserBookMood moodInstance : usersMoods) {
+            for (UserBookMood moodInstance : moods) {
                 String moodName = moodInstance.getMood().toString();
                 totalMoodCounts.put(moodName, totalMoodCounts.getOrDefault(moodName, 0.0) + moodInstance.getCountOfMood());
                 totalMoodScores.put(moodName, totalMoodScores.getOrDefault(moodName, 0.0) + moodInstance.getScoreOfMood());
