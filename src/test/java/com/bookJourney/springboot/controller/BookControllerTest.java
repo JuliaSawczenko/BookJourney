@@ -1,11 +1,11 @@
 package com.bookJourney.springboot.controller;
 
 import com.bookJourney.springboot.config.BookAlreadyExistsException;
+import com.bookJourney.springboot.dto.NewBookDTO;
 import com.bookJourney.springboot.repository.RoleRepository;
 import com.bookJourney.springboot.security.AuthEntryPointJwt;
 import com.bookJourney.springboot.security.JwtUtils;
 import com.bookJourney.springboot.security.SecurityConfig;
-import com.bookJourney.springboot.dto.BookDTO;
 import com.bookJourney.springboot.mocks.BookDTOMock;
 import com.bookJourney.springboot.service.BookService;
 import com.bookJourney.springboot.service.UserDetailsServiceImpl;
@@ -58,10 +58,10 @@ public class BookControllerTest {
     @DisplayName("POST /book/addBook adds a book successfully")
     void addBook_sucess() throws Exception {
         // Given
-        BookDTO bookDTO = BookDTOMock.getBookDTOforReadingStatus();
+        NewBookDTO bookDTO = BookDTOMock.getBookDTOforReadingStatus();
 
         // When
-        when(bookService.addBook(any(BookDTO.class), eq("testUser"))).thenReturn(1);
+        when(bookService.addBook(any(NewBookDTO.class), eq("testUser"))).thenReturn(1);
         String expectedResponse = "{\"message\":\"Book id is: 1\"}";
 
 
@@ -80,10 +80,10 @@ public class BookControllerTest {
     @DisplayName("POST /book/addBook throws BookAlreadyExistsException (400) if a given user already has the book")
     void addBook_failure() throws Exception {
         // Given
-        BookDTO bookDTO = BookDTOMock.getBookDTOforReadingStatus();
+        NewBookDTO bookDTO = BookDTOMock.getBookDTOforReadingStatus();
 
         // When
-        doThrow(BookAlreadyExistsException.class).when(bookService).addBook(any(BookDTO.class), eq("testUser"));
+        doThrow(BookAlreadyExistsException.class).when(bookService).addBook(any(NewBookDTO.class), eq("testUser"));
 
         // Then
         mockMvc.perform(post("/book/add")

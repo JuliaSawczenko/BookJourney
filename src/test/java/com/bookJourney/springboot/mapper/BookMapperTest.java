@@ -1,6 +1,6 @@
 package com.bookJourney.springboot.mapper;
 
-import com.bookJourney.springboot.dto.BookDTO;
+import com.bookJourney.springboot.dto.NewBookDTO;
 import com.bookJourney.springboot.entity.Book;
 import com.bookJourney.springboot.entity.BookDetail;
 import com.bookJourney.springboot.mocks.BookDTOMock;
@@ -17,11 +17,11 @@ public class BookMapperTest {
     @Test
     public void shouldCorrectlyMapBookDTOtoBook() {
         // Given
-        BookDTO bookDTO = BookDTOMock.getBookDTOforReadingStatus();
+        NewBookDTO bookDTO = BookDTOMock.getBookDTOforReadingStatus();
         BookDetail bookDetail = new BookDetail(bookDTO.title(), bookDTO.author());
 
         // When
-        Book book = mapper.BookDTOtoBook(bookDTO);
+        Book book = mapper.NewBookDTOtoBook(bookDTO);
         book.setBookDetail(bookDetail);
 
         // Then

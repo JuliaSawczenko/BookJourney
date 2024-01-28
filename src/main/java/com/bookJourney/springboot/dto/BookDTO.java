@@ -1,16 +1,14 @@
 package com.bookJourney.springboot.dto;
 
 import com.bookJourney.springboot.entity.BookStatus;
-import com.bookJourney.springboot.entity.EnumMood;
+import lombok.Data;
 
-import java.time.LocalDate;
-
-public record BookDTO(String title,
-                      String author,
-                      BookStatus status,
-                      ReviewDTO review,
-                      MoodsPercentageDTO moods,
-                      EnumMood mood,
-                      LocalDate startDate,
-                      LocalDate endDate) {
+@Data
+public class BookDTO {
+    private Integer id;
+    private String title;
+    private String author;
+    private BookStatus status;
+    private boolean favourite;
+    private String imageUrl;
 }
