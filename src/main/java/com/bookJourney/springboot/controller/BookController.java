@@ -55,4 +55,11 @@ public class BookController {
         return ResponseEntity.ok(bookService.getAllBooksGroupedByStatus(username));
     }
 
+    @PutMapping("/{bookId}/favourite")
+        public ResponseEntity<MessageResponse> changeFavouriteStatus(@PathVariable Integer bookId, Principal principal) throws BookNotFoundException {
+            String username = principal.getName();
+            bookService.changeFavouriteStatus(username, bookId);
+            return ResponseEntity.ok(new MessageResponse("Book added/deleted from the favourites list"));
+        }
+
 }

@@ -99,6 +99,19 @@ public class BookService {
         return groupedBooks;
     }
 
+    public void changeFavouriteStatus(String username, Integer bookId) throws BookNotFoundException {
+        User user = userService.getUserByUsername(username);
+
+        Optional<Book> book = getBookById(bookId, user);
+        if (book.isPresent()) {
+            boolean currentStatus = book.get().isFavourite();
+            book.get().setFavourite(!currentStatus);
+            bookRepository.save(book.get());
+        } else {
+            throw new BookNotFoundException();
+        }
+    }
+
 
     private boolean checkIfBookExists(String title, String author, User user) {
         return bookRepository.findByBookDetail_TitleAndBookDetail_AuthorAndUser(title, author, user).isPresent();
