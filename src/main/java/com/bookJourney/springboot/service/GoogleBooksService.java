@@ -3,11 +3,14 @@ package com.bookJourney.springboot.service;
 import com.bookJourney.springboot.config.BookNotFoundException;
 import com.bookJourney.springboot.entity.BookDetail;
 import org.json.JSONObject;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.json.JSONException;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -28,9 +31,23 @@ public class GoogleBooksService {
             String isbn = volumeInfo.getJSONArray("industryIdentifiers").getJSONObject(0).getString("identifier");
             String description = volumeInfo.getString("description");
             String publishedDate = volumeInfo.getString("publishedDate");
+
+            Double averageRating = null;
+            if (volumeInfo.has("averageRating")) {
+                averageRating = volumeInfo.getDouble("averageRating");
+            }
+
             String imageUrl = volumeInfo.getJSONObject("imageLinks").getString("thumbnail");
 
-            return new BookDetail(title, author, isbn, description, publishedDate, imageUrl);
+            JSONArray categoriesJsonArray = volumeInfo.optJSONArray("categories");
+            List<String> categories = new ArrayList<>();
+            if (categoriesJsonArray != null) {
+                for (int i = 0; i < categoriesJsonArray.length(); i++) {
+                    categories.add(categoriesJsonArray.getString(i));
+                }
+            }
+
+            return new BookDetail(title, author, isbn, description, publishedDate, imageUrl, categories, averageRating);
         } catch (JSONException e) {
             throw new BookNotFoundException();
         }

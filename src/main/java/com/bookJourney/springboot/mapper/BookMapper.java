@@ -28,7 +28,9 @@ public interface BookMapper {
             @Mapping(source = "bookDetail.isbn", target = "isbn"),
             @Mapping(source = "bookDetail.description", target = "description"),
             @Mapping(source = "bookDetail.publishedDate", target = "publishedDate"),
-            @Mapping(source = "bookDetail.imageUrl", target = "imageUrl")
+            @Mapping(source = "bookDetail.imageUrl", target = "imageUrl"),
+            @Mapping(source = "bookDetail.categories", target = "categories"),
+            @Mapping(source = "bookDetail.averageRating", target = "averageRating")
     })
     BookDetailsDTO toBookDetailsDTO(Book book);
 
