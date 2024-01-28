@@ -17,6 +17,7 @@ public interface BookMapper {
     @Mapping(target = "startDate", ignore = true)
     @Mapping(target = "endDate", ignore = true)
     @Mapping(target = "reviews", ignore = true)
+    @Mapping(target = "userBookMoods", ignore = true)
     Book NewBookDTOtoBook(NewBookDTO bookDTO);
 
 

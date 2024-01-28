@@ -56,10 +56,17 @@ public class BookController {
     }
 
     @PutMapping("/{bookId}/favourite")
-        public ResponseEntity<MessageResponse> changeFavouriteStatus(@PathVariable Integer bookId, Principal principal) throws BookNotFoundException {
-            String username = principal.getName();
-            bookService.changeFavouriteStatus(username, bookId);
-            return ResponseEntity.ok(new MessageResponse("Book added/deleted from the favourites list"));
-        }
+    public ResponseEntity<MessageResponse> changeFavouriteStatus(@PathVariable Integer bookId, Principal principal) throws BookNotFoundException {
+        String username = principal.getName();
+        bookService.changeFavouriteStatus(username, bookId);
+        return ResponseEntity.ok(new MessageResponse("Book added/deleted from the favourites list"));
+    }
+
+    @DeleteMapping("/{bookId}")
+    public ResponseEntity<MessageResponse> deleteBook(@PathVariable Integer bookId, Principal principal) throws BookNotFoundException {
+        String username = principal.getName();
+        bookService.deleteBook(username, bookId);
+        return ResponseEntity.ok(new MessageResponse("Book deleted successfully"));
+    }
 
 }

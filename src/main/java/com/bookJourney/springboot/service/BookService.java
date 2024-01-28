@@ -112,6 +112,17 @@ public class BookService {
         }
     }
 
+    public void deleteBook(String username, Integer bookId) throws BookNotFoundException {
+        User user = userService.getUserByUsername(username);
+
+        Optional<Book> book = getBookById(bookId, user);
+        if (book.isPresent()) {
+            bookRepository.delete(book.get());
+        } else {
+            throw new BookNotFoundException();
+        }
+    }
+
 
     private boolean checkIfBookExists(String title, String author, User user) {
         return bookRepository.findByBookDetail_TitleAndBookDetail_AuthorAndUser(title, author, user).isPresent();
