@@ -4,9 +4,11 @@ import com.bookJourney.springboot.config.BookAlreadyExistsException;
 import com.bookJourney.springboot.config.BookNotFoundException;
 import com.bookJourney.springboot.config.ReviewAlreadyExistsException;
 import com.bookJourney.springboot.dto.BookDTO;
+import com.bookJourney.springboot.dto.NewBookDTO;
 import com.bookJourney.springboot.dto.BookDetailsDTO;
 import com.bookJourney.springboot.entity.Book;
 import com.bookJourney.springboot.entity.BookDetail;
+import com.bookJourney.springboot.entity.BookStatus;
 import com.bookJourney.springboot.entity.User;
 import com.bookJourney.springboot.mapper.BookMapper;
 import com.bookJourney.springboot.repository.BookDetailRepository;
@@ -16,7 +18,11 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -35,7 +41,7 @@ public class BookService {
         return bookRepository.findByIdAndUser(bookId, user);
     }
 
-    public int addBook(BookDTO bookDTO, String username) throws BookNotFoundException, BookAlreadyExistsException, ReviewAlreadyExistsException {
+    public int addBook(NewBookDTO bookDTO, String username) throws BookNotFoundException, BookAlreadyExistsException, ReviewAlreadyExistsException {
         User user = userService.getUserByUsername(username);
 
         if (checkIfBookExists(bookDTO.title(), bookDTO.author(), user)) {
@@ -45,7 +51,7 @@ public class BookService {
         BookDetail bookDetail = fetchOrCreateBookDetail(bookDTO);
 
         bookDetailRepository.save(bookDetail);
-        Book book = mapper.BookDTOtoBook(bookDTO);
+        Book book = mapper.NewBookDTOtoBook(bookDTO);
         book.setUser(user);
         book.setBookDetail(bookDetail);
         bookRepository.save(book);
@@ -58,7 +64,7 @@ public class BookService {
     }
 
 
-    public void editBook(BookDTO bookDTO, String username, Integer bookId) throws BookNotFoundException, ReviewAlreadyExistsException {
+    public void editBook(NewBookDTO bookDTO, String username, Integer bookId) throws BookNotFoundException, ReviewAlreadyExistsException {
         User user = userService.getUserByUsername(username);
         Optional<Book> book = getBookById(bookId, user);
         if (book.isPresent()) {
@@ -82,13 +88,48 @@ public class BookService {
         }
     }
 
+    public Map<BookStatus, List<BookDTO>> getAllBooksGroupedByStatus(String username) {
+        User user = userService.getUserByUsername(username);
+
+        List<Book> books = bookRepository.findAllByUser(user);
+        Map<BookStatus, List<BookDTO>> groupedBooks = books.stream()
+                .map(mapper::toBookDTO)
+                .collect(Collectors.groupingBy(BookDTO::getStatus, () -> new EnumMap<>(BookStatus.class), Collectors.toList()));
+
+        return groupedBooks;
+    }
+
+    public void changeFavouriteStatus(String username, Integer bookId) throws BookNotFoundException {
+        User user = userService.getUserByUsername(username);
+
+        Optional<Book> book = getBookById(bookId, user);
+        if (book.isPresent()) {
+            boolean currentStatus = book.get().isFavourite();
+            book.get().setFavourite(!currentStatus);
+            bookRepository.save(book.get());
+        } else {
+            throw new BookNotFoundException();
+        }
+    }
+
+    public void deleteBook(String username, Integer bookId) throws BookNotFoundException {
+        User user = userService.getUserByUsername(username);
+
+        Optional<Book> book = getBookById(bookId, user);
+        if (book.isPresent()) {
+            bookRepository.delete(book.get());
+        } else {
+            throw new BookNotFoundException();
+        }
+    }
+
 
     private boolean checkIfBookExists(String title, String author, User user) {
         return bookRepository.findByBookDetail_TitleAndBookDetail_AuthorAndUser(title, author, user).isPresent();
     }
 
 
-    private BookDetail fetchOrCreateBookDetail(BookDTO bookDTO) throws BookNotFoundException {
+    private BookDetail fetchOrCreateBookDetail(NewBookDTO bookDTO) throws BookNotFoundException {
         Optional<BookDetail> bookDetailOptional = bookDetailRepository.findByTitleAndAuthor(bookDTO.title(), bookDTO.author());
 
         if (bookDetailOptional.isPresent()) {
@@ -99,7 +140,7 @@ public class BookService {
     }
 
 
-    private void handleBookStatus(BookDTO bookDTO, User user, Book book) throws ReviewAlreadyExistsException {
+    private void handleBookStatus(NewBookDTO bookDTO, User user, Book book) throws ReviewAlreadyExistsException {
         switch (book.getStatus()) {
             case READ:
                 if (bookDTO.review() != null) {
