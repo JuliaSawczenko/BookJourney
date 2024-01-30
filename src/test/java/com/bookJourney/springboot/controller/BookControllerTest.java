@@ -84,13 +84,14 @@ public class BookControllerTest {
 
         // When
         doThrow(BookAlreadyExistsException.class).when(bookService).addBook(any(NewBookDTO.class), eq("testUser"));
+        String expectedResponse = "{\"message\":\"Book with a given title and author already exists in your library.\"}";
 
         // Then
         mockMvc.perform(post("/book/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(bookDTO)))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("Book with a given title and author already exists in your library."));
+                .andExpect(content().json(expectedResponse));
 
         verify(bookService, times(1)).addBook(bookDTO, "testUser");
     }
