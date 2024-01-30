@@ -7,6 +7,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 
 @AllArgsConstructor
 @Data
@@ -23,4 +24,6 @@ public class BookDetailsDTO {
     private String description;
     private String publishedDate;
     private String imageUrl;
+    private List<String> categories;
+    private Double averageRating;
 }
