@@ -12,7 +12,7 @@ This Spring Boot application provides a variety of features accessible through i
 - App for tracking info about books you want to read, you are reading and already have read.
 - You can display detailed information about books (received from Google Books API).
 - For each book you have read, you can add reviews and moods and track your mood statistics.
-- You can check the statistics filtered by a specific mood, specific book, or general. You can also compare your statistics with other users' statistics. (in progress)
+- You can check the statistics filtered by a specific mood, specific book, or general. You can also compare your statistics with other users' statistics (in progress).
 - You can share books with your friends (in progress).
 - You receive emails with new notifications (in progress).
 
