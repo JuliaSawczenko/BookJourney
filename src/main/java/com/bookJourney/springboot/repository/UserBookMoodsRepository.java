@@ -13,6 +13,7 @@ import java.util.Optional;
 @RepositoryRestResource(exported = false)
 public interface UserBookMoodsRepository extends CrudRepository<UserBookMood, Integer> {
     List<UserBookMood> findByUserAndBook(User user, Book book);
+    List<UserBookMood> findByUserAndMood(User user, EnumMood mood);
     List<UserBookMood> findByUser(User user);
     Optional<UserBookMood> findByUserAndBookAndMood(User user, Book book, EnumMood mood);
 
