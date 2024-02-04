@@ -17,4 +17,5 @@ This Spring Boot application provides a variety of features accessible through i
 - You receive emails with new notifications (in progress).
 
 ## Technologies
-Java, Spring Boot, PostgreSQL, Gradle, REST, Heroku.
+Java, Spring Boot, PostgreSQL, Gradle, REST.
+The is currently deployed on Heroku.
