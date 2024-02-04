@@ -18,4 +18,4 @@ This Spring Boot application provides a variety of features accessible through i
 
 ## Technologies
 Java, Spring Boot, PostgreSQL, Gradle, REST.
-The is currently deployed on Heroku.
+The application is currently deployed on Heroku.
