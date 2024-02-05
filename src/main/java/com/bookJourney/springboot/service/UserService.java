@@ -1,5 +1,7 @@
 package com.bookJourney.springboot.service;
 
+import com.bookJourney.springboot.config.AddOneselfToFriendsException;
+import com.bookJourney.springboot.config.FriendshipAlreadyExistsException;
 import com.bookJourney.springboot.dto.NameChangeDTO;
 import com.bookJourney.springboot.dto.PasswordChangeDTO;
 import com.bookJourney.springboot.dto.ProfileDTO;
@@ -55,6 +57,23 @@ public class UserService {
         user.setFirstName(nameChangeDTO.firstName());
         user.setLastName(nameChangeDTO.lastName());
         userRepository.save(user);
+    }
+
+    public void addFriend(String username, String friendUsername) throws Exception {
+        User user = getUserByUsername(username);
+        User friend = getUserByUsername(friendUsername);
+
+        if (userRepository.existsFriendship(user, friend)) {
+            throw new FriendshipAlreadyExistsException();
+        } else if (username.equals(friendUsername)) {
+            throw new AddOneselfToFriendsException();
+        } else {
+            user.getFriends().add(friend);
+            friend.getFriends().add(user);
+
+            userRepository.save(user);
+            userRepository.save(friend);
+        }
     }
 
     User getUserByUsername(String username) {

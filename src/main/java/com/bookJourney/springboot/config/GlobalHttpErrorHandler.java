@@ -22,7 +22,18 @@ public class GlobalHttpErrorHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ReviewAlreadyExistsException.class)
     public ResponseEntity<Object> handleReviewAlreadyExistsException(ReviewAlreadyExistsException exception) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Review for a given book already exists"));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Review for a given book already exists."));
     }
+
+    @ExceptionHandler(FriendshipAlreadyExistsException.class)
+    public ResponseEntity<Object> handleFriendshipAlreadyExistsException(FriendshipAlreadyExistsException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Friend with a given username already exists in your friends list."));
+    }
+
+    @ExceptionHandler(AddOneselfToFriendsException.class)
+    public ResponseEntity<Object> handleAddOneselfToFriendsException(AddOneselfToFriendsException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("You cannot add yourself to a friends list. Submit your friend's username."));
+    }
+
 
 }

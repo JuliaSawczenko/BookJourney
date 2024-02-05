@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -48,6 +50,14 @@ public class UserController {
 
         userService.changeName(username, nameChangeDTO);
         return ResponseEntity.ok(new MessageResponse("Name changed successfully."));
+    }
+
+    @PostMapping("/add_friend")
+    public ResponseEntity<MessageResponse> addFriend(@RequestParam String friendUsername, Principal principal) throws Exception {
+        String username = principal.getName();
+        userService.addFriend(username, friendUsername);
+        return ResponseEntity.ok(new MessageResponse("Friend with a username " + friendUsername + " added successfully."));
+
     }
 
 
