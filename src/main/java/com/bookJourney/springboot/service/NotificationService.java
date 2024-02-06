@@ -38,7 +38,7 @@ public class NotificationService {
         String title = book.getBook().getBookDetail().getTitle();
         String author = book.getBook().getBookDetail().getAuthor();
         ReviewDTO reviewDTO = mapper.reviewToReviewDTO(book.getReview());
-        NotificationDTO notificationDTO = new NotificationDTO(book.getOwner().getUsername(), title, author, reviewDTO, book.isRecommended());
+        NotificationDTO notificationDTO = new NotificationDTO(book.getOwner().getUsername(), title, author, reviewDTO, book.isRecommended(), book.getDateShared());
 
         List<SseEmitter> deadEmitters = new ArrayList<>();
         this.emitters.forEach(emitter -> {
