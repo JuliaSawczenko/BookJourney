@@ -40,8 +40,8 @@ public class Book {
     @Column
     private LocalDate endDate;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews = new ArrayList<>();
+    @OneToOne(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Review review;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserBookMood> userBookMoods = new ArrayList<>();

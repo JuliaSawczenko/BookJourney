@@ -92,11 +92,10 @@ public class BookService {
         User user = userService.getUserByUsername(username);
 
         List<Book> books = bookRepository.findAllByUser(user);
-        Map<BookStatus, List<BookDTO>> groupedBooks = books.stream()
+
+        return books.stream()
                 .map(mapper::toBookDTO)
                 .collect(Collectors.groupingBy(BookDTO::getStatus, () -> new EnumMap<>(BookStatus.class), Collectors.toList()));
-
-        return groupedBooks;
     }
 
     public void changeFavouriteStatus(String username, Integer bookId) throws BookNotFoundException {
@@ -123,7 +122,7 @@ public class BookService {
         }
     }
 
-    public void shareBook(String username, Integer bookId, String friendUsername) throws BookNotFoundException {
+    public void shareBook(String username, Integer bookId, String friendUsername, boolean isRecommended) throws BookNotFoundException {
         User user = userService.getUserByUsername(username);
         User friend = userService.getUserByUsername(friendUsername);
 
@@ -134,9 +133,11 @@ public class BookService {
             bookToShare.setBook(book.get());
             bookToShare.setOwner(user);
             bookToShare.setFriend(friend);
+            bookToShare.setRecommended(isRecommended);
+            bookToShare.setReview(book.get().getReview());
             sharedBookRepository.save(bookToShare);
 
-            notificationService.triggerNotification(user, friend, bookToShare);
+            notificationService.triggerNotification(bookToShare);
         } else {
             throw new BookNotFoundException();
         }

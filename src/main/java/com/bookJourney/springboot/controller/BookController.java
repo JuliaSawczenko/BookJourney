@@ -70,9 +70,9 @@ public class BookController {
     }
 
     @PostMapping("/{bookId}/share")
-    public ResponseEntity<MessageResponse> shareBook(@PathVariable Integer bookId, @RequestParam String friendUsername, Principal principal) throws BookNotFoundException {
+    public ResponseEntity<MessageResponse> shareBook(@PathVariable Integer bookId, @RequestParam String friendUsername, @RequestParam boolean isRecommended, Principal principal) throws BookNotFoundException {
         String username = principal.getName();
-        bookService.shareBook(username, bookId, friendUsername);
+        bookService.shareBook(username, bookId, friendUsername, isRecommended);
         return ResponseEntity.ok(new MessageResponse("Book shared successfully with a user " + friendUsername));
     }
 

@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -27,4 +30,14 @@ public class SharedBook {
     @ManyToOne
     @JoinColumn(name = "friend_user_id", nullable = false)
     private User friend;
+
+    @Column
+    private boolean isRecommended;
+
+    @OneToOne(mappedBy = "sharedBook", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Review review;
+
+    @Column
+    private LocalDateTime dateShared = LocalDateTime.now();
+
 }
