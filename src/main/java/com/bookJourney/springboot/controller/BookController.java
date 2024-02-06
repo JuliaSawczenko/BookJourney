@@ -69,4 +69,11 @@ public class BookController {
         return ResponseEntity.ok(new MessageResponse("Book deleted successfully"));
     }
 
+    @PostMapping("/{bookId}/share")
+    public ResponseEntity<MessageResponse> shareBook(@PathVariable Integer bookId, @RequestParam String friendUsername, Principal principal) throws BookNotFoundException {
+        String username = principal.getName();
+        bookService.shareBook(username, bookId, friendUsername);
+        return ResponseEntity.ok(new MessageResponse("Book shared successfully with a user " + friendUsername));
+    }
+
 }
