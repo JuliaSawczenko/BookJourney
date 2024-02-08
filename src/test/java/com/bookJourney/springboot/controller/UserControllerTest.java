@@ -78,7 +78,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("PUT user/change_password changes user password and returns 200")
+    @DisplayName("PUT user/password changes user password and returns 200")
     @WithMockUser(username = "testUser")
     public void changePassword_success() throws Exception {
         //Given
@@ -90,7 +90,7 @@ class UserControllerTest {
 
 
         //Then
-        mockMvc.perform(put("/user/change_password")
+        mockMvc.perform(put("/user/password")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(passwordChangeDTO)))
                         .andExpect(status().isOk())
@@ -98,7 +98,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("PUT user/change_password fails if current password is incorrect and returns 400")
+    @DisplayName("PUT user/password fails if current password is incorrect and returns 400")
     @WithMockUser(username = "testUser")
     public void changePassword_failure() throws Exception {
         //Given
@@ -110,7 +110,7 @@ class UserControllerTest {
 
 
         //Then
-        mockMvc.perform(put("/user/change_password")
+        mockMvc.perform(put("/user/password")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(passwordChangeDTO)))
                 .andExpect(status().isBadRequest())
@@ -120,7 +120,7 @@ class UserControllerTest {
 
 
     @Test
-    @DisplayName("PUT user/change_name changes user's name and returns 200")
+    @DisplayName("PUT user/name changes user's name and returns 200")
     @WithMockUser(username = "testUser")
     public void changeName_success() throws Exception {
         // Given
@@ -133,7 +133,7 @@ class UserControllerTest {
 
 
         //Then
-        mockMvc.perform(put("/user/change_name")
+        mockMvc.perform(put("/user/name")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(nameChangeDTO)))
                 .andExpect(status().isOk())

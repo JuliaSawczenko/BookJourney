@@ -67,7 +67,7 @@ public class AuthControllerTest {
     private UserMapper userMapper;
 
     @Test
-    @DisplayName("POST auth/register adds a User and returns 200")
+    @DisplayName("POST auth/users adds a User and returns 200")
     public void registerUser_success() throws Exception {
         // Given
         RegistrationRequestDTO dto = RegistrationRequestDTOMock.getBasicRegistrationRequestDTO();
@@ -79,7 +79,7 @@ public class AuthControllerTest {
 
 
         // Then
-        mockMvc.perform(post("/auth/register")
+        mockMvc.perform(post("/auth/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(dto)))
                 .andExpect(status().isOk())

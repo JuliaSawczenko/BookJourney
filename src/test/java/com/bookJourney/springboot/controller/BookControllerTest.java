@@ -55,7 +55,7 @@ public class BookControllerTest {
 
     @Test
     @WithMockUser(username = "testUser")
-    @DisplayName("POST /book/addBook adds a book successfully")
+    @DisplayName("POST /book adds a book successfully")
     void addBook_sucess() throws Exception {
         // Given
         NewBookDTO bookDTO = BookDTOMock.getBookDTOforReadingStatus();
@@ -66,7 +66,7 @@ public class BookControllerTest {
 
 
         // Then
-        mockMvc.perform(post("/book/add")
+        mockMvc.perform(post("/book")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(bookDTO)))
                 .andExpect(status().isOk())
@@ -77,7 +77,7 @@ public class BookControllerTest {
 
     @Test
     @WithMockUser(username = "testUser")
-    @DisplayName("POST /book/addBook throws BookAlreadyExistsException (400) if a given user already has the book")
+    @DisplayName("POST /book throws BookAlreadyExistsException (400) if a given user already has the book")
     void addBook_failure() throws Exception {
         // Given
         NewBookDTO bookDTO = BookDTOMock.getBookDTOforReadingStatus();
@@ -87,7 +87,7 @@ public class BookControllerTest {
         String expectedResponse = "{\"message\":\"Book with a given title and author already exists in your library.\"}";
 
         // Then
-        mockMvc.perform(post("/book/add")
+        mockMvc.perform(post("/book")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(bookDTO)))
                 .andExpect(status().isBadRequest())
