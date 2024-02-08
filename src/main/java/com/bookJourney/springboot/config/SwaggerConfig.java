@@ -11,7 +11,7 @@ public class SwaggerConfig {
         return GroupedOpenApi.builder()
                 .group("springshop-public")
                 .packagesToScan("com.bookJourney.springboot.controller")
-                .pathsToMatch("/auth/**", "/user/**", "/book/**", "/stats/**")
+                .pathsToMatch("/auth/**", "/user/**", "/book/**", "/stats/**", "/notifications/**")
                 .build();
     }
 }
