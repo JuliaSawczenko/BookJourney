@@ -72,7 +72,7 @@ public class AuthController {
     }
 
 
-    @PostMapping("/register")
+    @PostMapping("/users")
     public ResponseEntity<MessageResponse> register(@RequestBody @Valid RegistrationRequestDTO registrationRequestDTO) {
         if (userRepository.existsByUsername(registrationRequestDTO.username())) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));

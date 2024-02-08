@@ -24,19 +24,19 @@ public class StatsController {
         this.moodDataService = moodDataService;
     }
 
-    @GetMapping("/moods_for_user")
+    @GetMapping("/moods")
     public ResponseEntity<MoodsPercentageDTO> getMoodsForUser(Principal principal) {
         String username = principal.getName();
         return ResponseEntity.ok(moodDataService.calculateStatisticsForUser(username));
     }
 
-    @GetMapping("/moods_for_user_book")
+    @GetMapping("/moods-by-book")
     public ResponseEntity<MoodsPercentageDTO> getMoodsForUserAndBook(@RequestParam Integer bookId, Principal principal) throws BookNotFoundException {
         String username = principal.getName();
         return ResponseEntity.ok(moodDataService.calculateStatisticsForUserAndBook(username, bookId));
     }
 
-    @GetMapping("/moods_for_user_mood")
+    @GetMapping("/moods-by-mood")
     public ResponseEntity<List<BookDTO>> getMoodsForUserAndMood(@RequestParam EnumMood mood, Principal principal) {
         String username = principal.getName();
         return ResponseEntity.ok(moodDataService.calculateStatisticsForUserAndMood(username, mood));

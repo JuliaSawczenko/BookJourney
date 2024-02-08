@@ -32,7 +32,7 @@ public class UserController {
         return ResponseEntity.ok(profileDTO);
     }
 
-    @PutMapping("/change_password")
+    @PutMapping("/password")
     public ResponseEntity<?> changePassword(@RequestBody @Valid PasswordChangeDTO passwordChangeDTO) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -44,7 +44,7 @@ public class UserController {
         return new ResponseEntity<>(new MessageResponse("Current password not correct"), HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping("/change_name")
+    @PutMapping("/name")
     public ResponseEntity<?> changeName(@RequestBody @Valid NameChangeDTO nameChangeDTO) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -52,7 +52,7 @@ public class UserController {
         return ResponseEntity.ok(new MessageResponse("Name changed successfully."));
     }
 
-    @PostMapping("/add_friend")
+    @PostMapping("/friends")
     public ResponseEntity<MessageResponse> addFriend(@RequestParam String friendUsername, Principal principal) throws Exception {
         String username = principal.getName();
         userService.addFriend(username, friendUsername);

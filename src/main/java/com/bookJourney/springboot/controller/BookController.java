@@ -28,28 +28,28 @@ public class BookController {
 
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<MessageResponse> addBook(@RequestBody @Valid NewBookDTO bookDTO, Principal principal) throws BookNotFoundException, BookAlreadyExistsException, ReviewAlreadyExistsException {
         String username = principal.getName();
         int bookId = bookService.addBook(bookDTO, username);
         return ResponseEntity.ok(new MessageResponse("Book id is: " + bookId));
     }
 
-    @PostMapping("/{bookId}/edit")
+    @PutMapping("/{bookId}")
     public ResponseEntity<MessageResponse> editBook(@PathVariable Integer bookId, @RequestBody @Valid NewBookDTO bookDTO, Principal principal) throws BookNotFoundException, ReviewAlreadyExistsException {
         String username = principal.getName();
         bookService.editBook(bookDTO, username, bookId);
         return ResponseEntity.ok(new MessageResponse("Book edited successfully"));
     }
 
-    @GetMapping("/{bookId}/details")
+    @GetMapping("/{bookId}")
     public ResponseEntity<BookDetailsDTO> getDetails(@PathVariable Integer bookId, Principal principal) throws BookNotFoundException {
         String username = principal.getName();
         BookDetailsDTO bookDetailsDTO = bookService.getBookDetails(username, bookId);
         return ResponseEntity.ok(bookDetailsDTO);
     }
 
-    @GetMapping("/all_books")
+    @GetMapping("/books")
     public ResponseEntity<Map<BookStatus, List<BookDTO>>> getAllBooks(Principal principal) {
         String username = principal.getName();
         return ResponseEntity.ok(bookService.getAllBooksGroupedByStatus(username));
