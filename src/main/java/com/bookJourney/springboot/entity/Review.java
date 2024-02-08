@@ -18,9 +18,13 @@ public class Review {
     @GeneratedValue
     private Integer id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "book_id")
     private Book book;
+
+    @OneToOne
+    @JoinColumn(name = "shared_book_id")
+    private SharedBook sharedBook;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

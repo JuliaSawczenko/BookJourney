@@ -1,7 +1,9 @@
 package com.bookJourney.springboot.repository;
 
-import org.springframework.stereotype.Repository;
+import com.bookJourney.springboot.entity.SharedBook;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-@Repository
-public interface SharedBookRepository {
+@RepositoryRestResource(exported = false)
+public interface SharedBookRepository extends CrudRepository<SharedBook, Integer> {
 }

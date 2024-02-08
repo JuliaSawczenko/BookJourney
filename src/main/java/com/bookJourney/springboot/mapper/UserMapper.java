@@ -7,6 +7,7 @@ import org.mapstruct.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
@@ -29,5 +30,6 @@ public interface UserMapper {
     default void setDefaultValues(@MappingTarget User user) {
         user.setAccountCreated(LocalDate.now());
         user.setBooks(new ArrayList<>());
+        user.setFriends(new HashSet<>());
     }
 }

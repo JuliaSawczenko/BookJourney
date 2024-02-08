@@ -18,6 +18,8 @@ public interface ReviewMapper {
     @Mapping(target = "dateAdded", ignore = true)
     Review reviewDTOtoReview(ReviewDTO dto);
 
+    ReviewDTO reviewToReviewDTO(Review review);
+
     @AfterMapping
     default void setDefaultValues(@MappingTarget Review review) {
         review.setDateAdded(LocalDate.now());

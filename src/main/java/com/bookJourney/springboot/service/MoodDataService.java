@@ -1,20 +1,20 @@
 package com.bookJourney.springboot.service;
 
 import com.bookJourney.springboot.config.BookNotFoundException;
+import com.bookJourney.springboot.dto.BookDTO;
 import com.bookJourney.springboot.dto.MoodsPercentageDTO;
 import com.bookJourney.springboot.entity.Book;
 import com.bookJourney.springboot.entity.EnumMood;
 import com.bookJourney.springboot.entity.User;
 import com.bookJourney.springboot.entity.UserBookMood;
+import com.bookJourney.springboot.mapper.BookMapper;
 import com.bookJourney.springboot.repository.BookRepository;
 import com.bookJourney.springboot.repository.UserBookMoodsRepository;
-import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class MoodDataService {
@@ -25,6 +25,7 @@ public class MoodDataService {
     private final UserBookMoodsRepository userBookMoodsRepository;
     private final BookRepository bookRepository;
     private final UserService userService;
+    private final BookMapper mapper = Mappers.getMapper(BookMapper.class);
 
     public MoodDataService(UserBookMoodsRepository userBookMoodsRepository, BookRepository bookRepository, UserService userService) {
         this.userBookMoodsRepository = userBookMoodsRepository;
@@ -87,6 +88,16 @@ public class MoodDataService {
         } else {
             throw new BookNotFoundException();
         }
+    }
+
+    // Takes into account all books for a specific mood and user
+    public List<BookDTO> calculateStatisticsForUserAndMood(String username, EnumMood mood) {
+        User user = userService.getUserByUsername(username);
+        List<UserBookMood> userBooks = userBookMoodsRepository.findByUserAndMood(user, mood);
+        return userBooks.stream()
+                .map(UserBookMood::getBook)
+                .map(mapper::toBookDTO)
+                .collect(Collectors.toList());
     }
 
     // Takes into account all moods for all books for a specific user

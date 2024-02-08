@@ -1,9 +1,7 @@
 package com.bookJourney.springboot.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,6 +12,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@EqualsAndHashCode(exclude = {"books", "reviews", "roles", "friends"})
+@ToString(exclude = {"books", "reviews", "roles", "friends"})
 @Entity
 @Table(name = "users")
 public class User {
@@ -58,6 +58,12 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "user_friends",
+    joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "friend_id"))
+    private Set<User> friends = new HashSet<>();
 
     public User(String username, String email, String password) {
         this.username = username;
