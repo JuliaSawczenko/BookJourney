@@ -1,12 +1,10 @@
 package com.bookJourney.springboot.dto;
 
 import com.bookJourney.springboot.entity.BookStatus;
-import com.bookJourney.springboot.entity.EnumMood;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
 
 @AllArgsConstructor
@@ -16,7 +14,8 @@ public class BookDetailsDTO {
     private String author;
     private BookStatus status;
     private ReviewDTO review;
-    private MoodsPercentageDTO moods;
+    private MoodsPercentageDTO moodPercentages;
+    private MoodsPercentageDTO moodScores;
     private LocalDate startDate;
     private LocalDate endDate;
     private boolean favourite;

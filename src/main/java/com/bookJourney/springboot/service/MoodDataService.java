@@ -78,6 +78,23 @@ public class MoodDataService {
         }
     }
 
+    public MoodsPercentageDTO getMoodScores(String username, Integer bookId) throws BookNotFoundException {
+        User user = userService.getUserByUsername(username);
+        Optional<Book> book = bookRepository.findByIdAndUser(bookId, user);
+        if (book.isPresent()) {
+            List<UserBookMood> usersAndBookMoods = userBookMoodsRepository.findByUserAndBook(user, book.get());
+            Map<EnumMood, Double> moodScores = new HashMap<>();
+            usersAndBookMoods.forEach(userBookMood -> {
+                EnumMood mood = userBookMood.getMood();
+                Double score = userBookMood.getScoreOfMood();
+                moodScores.put(mood, score);
+            });
+            return new MoodsPercentageDTO(moodScores);
+        } else {
+            throw new BookNotFoundException();
+        }
+    }
+
     // Takes into account moods for a specific books for a specific user
     public MoodsPercentageDTO calculateStatisticsForUserAndBook(String username, Integer bookId) throws BookNotFoundException {
         User user = userService.getUserByUsername(username);
@@ -108,38 +125,38 @@ public class MoodDataService {
     }
 
 
-        public MoodsPercentageDTO calculateStatistics(List<UserBookMood> moods) {
-            Map<String, Double> totalMoodCounts = new HashMap<>();
-            Map<String, Double> totalMoodScores = new HashMap<>();
+    public MoodsPercentageDTO calculateStatistics(List<UserBookMood> moods) {
+        Map<String, Double> totalMoodCounts = new HashMap<>();
+        Map<String, Double> totalMoodScores = new HashMap<>();
 
-            // Aggregate counts and scores for each mood
-            for (UserBookMood moodInstance : moods) {
-                String moodName = moodInstance.getMood().toString();
-                totalMoodCounts.put(moodName, totalMoodCounts.getOrDefault(moodName, 0.0) + moodInstance.getCountOfMood());
-                totalMoodScores.put(moodName, totalMoodScores.getOrDefault(moodName, 0.0) + moodInstance.getScoreOfMood());
-            }
+        // Aggregate counts and scores for each mood
+        for (UserBookMood moodInstance : moods) {
+            String moodName = moodInstance.getMood().toString();
+            totalMoodCounts.put(moodName, totalMoodCounts.getOrDefault(moodName, 0.0) + moodInstance.getCountOfMood());
+            totalMoodScores.put(moodName, totalMoodScores.getOrDefault(moodName, 0.0) + moodInstance.getScoreOfMood());
+        }
 
-            Map<String, Double> weightedMoodScores = new HashMap<>();
-            double totalWeightedScore = 0;
+        Map<String, Double> weightedMoodScores = new HashMap<>();
+        double totalWeightedScore = 0;
 
-            // Calculate weighted score and total weighted score
-            for (String mood : totalMoodCounts.keySet()) {
-                double countWeight = totalMoodCounts.get(mood) * WEIGHT_FOR_COUNT;
-                double scoreWeight = (totalMoodScores.get(mood) / (double) MAX_SCORE) * WEIGHT_FOR_SCORE;
-                double weightedScore = countWeight + scoreWeight;
+        // Calculate weighted score and total weighted score
+        for (String mood : totalMoodCounts.keySet()) {
+            double countWeight = totalMoodCounts.get(mood) * WEIGHT_FOR_COUNT;
+            double scoreWeight = (totalMoodScores.get(mood) / (double) MAX_SCORE) * WEIGHT_FOR_SCORE;
+            double weightedScore = countWeight + scoreWeight;
 
-                weightedMoodScores.put(mood, weightedScore);
-                totalWeightedScore += weightedScore;
-            }
+            weightedMoodScores.put(mood, weightedScore);
+            totalWeightedScore += weightedScore;
+        }
 
             // Calculate percentage for each mood
-            Map<EnumMood, Double> moodPercentages = new HashMap<>();
-            for (Map.Entry<String, Double> entry : weightedMoodScores.entrySet()) {
-                double percentage = (entry.getValue() / totalWeightedScore) * 100;
-                moodPercentages.put(EnumMood.valueOf(entry.getKey()), percentage);
-            }
-
-            return new MoodsPercentageDTO(moodPercentages);
+        Map<EnumMood, Double> moodPercentages = new HashMap<>();
+        for (Map.Entry<String, Double> entry : weightedMoodScores.entrySet()) {
+            double percentage = (entry.getValue() / totalWeightedScore) * 100;
+            moodPercentages.put(EnumMood.valueOf(entry.getKey()), percentage);
         }
+
+        return new MoodsPercentageDTO(moodPercentages);
     }
+}
 

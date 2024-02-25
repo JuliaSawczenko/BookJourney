@@ -81,7 +81,8 @@ public class BookService {
         if (book.isPresent()) {
             BookDetailsDTO bookDetailsDTO = mapper.toBookDetailsDTO(book.get());
             bookDetailsDTO.setReview(reviewService.getReviewOfBook(book.get(), user));
-            bookDetailsDTO.setMoods(moodDataService.calculateStatisticsForUserAndBook(username, bookId));
+            bookDetailsDTO.setMoodPercentages(moodDataService.calculateStatisticsForUserAndBook(username, bookId));
+            bookDetailsDTO.setMoodScores(moodDataService.getMoodScores(username, bookId));
             return bookDetailsDTO;
         } else {
             throw new BookNotFoundException();
