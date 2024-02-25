@@ -1,6 +1,7 @@
 package com.bookJourney.springboot.service;
 
 import com.bookJourney.springboot.config.BookNotFoundException;
+import com.bookJourney.springboot.config.InvalidArgumentsException;
 import com.bookJourney.springboot.dto.BookDTO;
 import com.bookJourney.springboot.dto.MoodsPercentageDTO;
 import com.bookJourney.springboot.entity.Book;
@@ -33,7 +34,23 @@ public class MoodDataService {
         this.userService = userService;
     }
 
-    public void addCurrentMood(EnumMood mood, Book book, User user) {
+    public Object getStatistics(String username, Integer bookId, EnumMood mood) throws BookNotFoundException, InvalidArgumentsException {
+        if (bookId != null && mood != null) {
+            throw new InvalidArgumentsException();
+        }
+        if (bookId == null && mood == null) {
+            return getStatisticsForUser(username);
+        }
+        if (bookId != null) {
+            return getStatisticsForUserAndBook(username, bookId);
+        }
+        if (mood != null) {
+            return getStatisticsForUserAndMood(username, mood);
+        }
+        throw new InvalidArgumentsException();
+    }
+
+    void addCurrentMood(EnumMood mood, Book book, User user) {
         Optional<UserBookMood> specificMoodOptional = userBookMoodsRepository.findByUserAndBookAndMood(user, book, mood);
 
         if (specificMoodOptional.isPresent()) {
@@ -78,7 +95,7 @@ public class MoodDataService {
         }
     }
 
-    public MoodsPercentageDTO getMoodScores(String username, Integer bookId) throws BookNotFoundException {
+    MoodsPercentageDTO getMoodScores(String username, Integer bookId) throws BookNotFoundException {
         User user = userService.getUserByUsername(username);
         Optional<Book> book = bookRepository.findByIdAndUser(bookId, user);
         if (book.isPresent()) {
@@ -96,7 +113,7 @@ public class MoodDataService {
     }
 
     // Takes into account moods for a specific books for a specific user
-    public MoodsPercentageDTO calculateStatisticsForUserAndBook(String username, Integer bookId) throws BookNotFoundException {
+    MoodsPercentageDTO getStatisticsForUserAndBook(String username, Integer bookId) throws BookNotFoundException {
         User user = userService.getUserByUsername(username);
         Optional<Book> book = bookRepository.findByIdAndUser(bookId, user);
         if (book.isPresent()) {
@@ -108,7 +125,7 @@ public class MoodDataService {
     }
 
     // Takes into account all books for a specific mood and user
-    public List<BookDTO> calculateStatisticsForUserAndMood(String username, EnumMood mood) {
+    private List<BookDTO> getStatisticsForUserAndMood(String username, EnumMood mood) {
         User user = userService.getUserByUsername(username);
         List<UserBookMood> userBooks = userBookMoodsRepository.findByUserAndMood(user, mood);
         return userBooks.stream()
@@ -118,14 +135,14 @@ public class MoodDataService {
     }
 
     // Takes into account all moods for all books for a specific user
-    public MoodsPercentageDTO calculateStatisticsForUser(String username) {
+    private MoodsPercentageDTO getStatisticsForUser(String username) {
         User user = userService.getUserByUsername(username);
         List<UserBookMood> usersMoods = userBookMoodsRepository.findByUser(user);
         return calculateStatistics(usersMoods);
     }
 
 
-    public MoodsPercentageDTO calculateStatistics(List<UserBookMood> moods) {
+    private MoodsPercentageDTO calculateStatistics(List<UserBookMood> moods) {
         Map<String, Double> totalMoodCounts = new HashMap<>();
         Map<String, Double> totalMoodScores = new HashMap<>();
 

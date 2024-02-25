@@ -1,8 +1,5 @@
 package com.bookJourney.springboot.controller;
 
-import com.bookJourney.springboot.config.BookNotFoundException;
-import com.bookJourney.springboot.dto.BookDTO;
-import com.bookJourney.springboot.dto.MoodsPercentageDTO;
 import com.bookJourney.springboot.entity.EnumMood;
 import com.bookJourney.springboot.service.MoodDataService;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
-import java.util.List;
 
 @RestController
 @RequestMapping("/stats")
@@ -24,22 +20,11 @@ public class StatsController {
         this.moodDataService = moodDataService;
     }
 
-    @GetMapping("/moods")
-    public ResponseEntity<MoodsPercentageDTO> getMoodsForUser(Principal principal) {
+    @GetMapping
+    public ResponseEntity<?> getStatistics(Principal principal, @RequestParam(required = false) Integer bookId, @RequestParam(required = false) EnumMood mood) throws Exception {
         String username = principal.getName();
-        return ResponseEntity.ok(moodDataService.calculateStatisticsForUser(username));
+        return ResponseEntity.ok(moodDataService.getStatistics(username, bookId, mood));
     }
 
-    @GetMapping("/moods-by-book")
-    public ResponseEntity<MoodsPercentageDTO> getMoodsForUserAndBook(@RequestParam Integer bookId, Principal principal) throws BookNotFoundException {
-        String username = principal.getName();
-        return ResponseEntity.ok(moodDataService.calculateStatisticsForUserAndBook(username, bookId));
-    }
-
-    @GetMapping("/moods-by-mood")
-    public ResponseEntity<List<BookDTO>> getMoodsForUserAndMood(@RequestParam EnumMood mood, Principal principal) {
-        String username = principal.getName();
-        return ResponseEntity.ok(moodDataService.calculateStatisticsForUserAndMood(username, mood));
-    }
 
 }

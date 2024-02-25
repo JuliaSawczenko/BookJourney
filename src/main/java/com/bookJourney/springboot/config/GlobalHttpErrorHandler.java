@@ -35,5 +35,10 @@ public class GlobalHttpErrorHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("You cannot add yourself to a friends list. Submit your friend's username."));
     }
 
+    @ExceptionHandler(InvalidArgumentsException.class)
+    public ResponseEntity<Object> handleInvalidArgumentsException(InvalidArgumentsException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Invalid arguments."));
+    }
+
 
 }
