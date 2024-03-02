@@ -16,6 +16,7 @@ public class MockedValues {
     public static final LocalDate LOCAL_DATE = LocalDate.of(2024, 1, 1);
     public static final String AUTHOR = "Jack Higgins";
     public static final String TITLE = "Night of the Fox";
+    public static final String GOOGLE_BOOKS_ID = "123";
     public static final BookStatus STATUS = READING;
     public static final EnumMood MOOD = EnumMood.HAPPY;
 }

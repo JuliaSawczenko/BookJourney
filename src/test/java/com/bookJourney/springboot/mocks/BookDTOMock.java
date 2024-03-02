@@ -10,6 +10,6 @@ public class BookDTOMock {
     }
 
     public static NewBookDTO getBookDTOforReadingStatus() {
-        return new NewBookDTO(TITLE, AUTHOR, STATUS, null, null,  MOOD, null, null);
+        return new NewBookDTO(TITLE, AUTHOR, GOOGLE_BOOKS_ID, STATUS, null, null,  MOOD, null, null);
     }
 }

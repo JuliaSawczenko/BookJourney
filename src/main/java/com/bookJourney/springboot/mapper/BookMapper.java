@@ -37,6 +37,7 @@ public interface BookMapper {
     BookDetailsDTO toBookDetailsDTO(Book book);
 
     @Mappings({
+            @Mapping(source = "bookDetail.googleBookId", target = "googleBookId"),
             @Mapping(source = "bookDetail.title", target = "title"),
             @Mapping(source = "bookDetail.author", target = "author"),
             @Mapping(source = "bookDetail.imageUrl", target = "imageUrl")

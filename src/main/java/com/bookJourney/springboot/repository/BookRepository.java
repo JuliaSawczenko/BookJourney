@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @RepositoryRestResource(exported = false)
 public interface BookRepository extends CrudRepository<Book, Integer> {
-    Optional<Book> findByBookDetail_TitleAndBookDetail_AuthorAndUser(String title, String author, User user);
+    Optional<Book> findByBookDetail_GoogleBookIdAndUser(String googleBookId, User user);
     Optional<Book> findByIdAndUser(Integer id, User user);
     List<Book> findAllByUser(User user);
 }

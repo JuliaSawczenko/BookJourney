@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 public record NewBookDTO(String title,
                          String author,
+                         String googleBooksId,
                          BookStatus status,
                          ReviewDTO review,
                          MoodsPercentageDTO moods,

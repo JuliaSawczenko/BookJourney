@@ -20,6 +20,9 @@ public class BookDetail {
     private Integer id;
 
     @Column
+    private String googleBookId;
+
+    @Column
     private String title;
 
     @Column
@@ -46,7 +49,8 @@ public class BookDetail {
     @OneToMany(mappedBy = "bookDetail", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Book> books = new ArrayList<>();
 
-    public BookDetail(String title, String author, String isbn, String description, String publishedDate, String imageUrl, List<String> categories, Double averageRating) {
+    public BookDetail(String googleBookId, String title, String author, String isbn, String description, String publishedDate, String imageUrl, List<String> categories, Double averageRating) {
+        this.googleBookId = googleBookId;
         this.title = title;
         this.author = author;
         this.isbn = isbn;

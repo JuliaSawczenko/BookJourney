@@ -44,11 +44,17 @@ public class BookService {
     public int addBook(NewBookDTO bookDTO, String username) throws BookNotFoundException, BookAlreadyExistsException, ReviewAlreadyExistsException {
         User user = userService.getUserByUsername(username);
 
-        if (checkIfBookExists(bookDTO.title(), bookDTO.author(), user)) {
-            throw new BookAlreadyExistsException();
-        }
+        BookDetail bookDetail = new BookDetail();
+        if (bookDTO.googleBooksId() == null) {
+            bookDetail.setAuthor(bookDTO.author());
+            bookDetail.setTitle(bookDTO.title());
+        } else {
+            if (checkIfBookExists(bookDTO.googleBooksId(), user)) {
+                throw new BookAlreadyExistsException();
+            }
 
-        BookDetail bookDetail = fetchOrCreateBookDetail(bookDTO);
+            bookDetail = fetchOrCreateBookDetail(bookDTO);
+        }
 
         bookDetailRepository.save(bookDetail);
         Book book = mapper.NewBookDTOtoBook(bookDTO);
@@ -145,18 +151,18 @@ public class BookService {
     }
 
 
-    private boolean checkIfBookExists(String title, String author, User user) {
-        return bookRepository.findByBookDetail_TitleAndBookDetail_AuthorAndUser(title, author, user).isPresent();
+    private boolean checkIfBookExists(String googleBookId, User user) {
+        return bookRepository.findByBookDetail_GoogleBookIdAndUser(googleBookId, user).isPresent();
     }
 
 
     private BookDetail fetchOrCreateBookDetail(NewBookDTO bookDTO) throws BookNotFoundException {
-        Optional<BookDetail> bookDetailOptional = bookDetailRepository.findByTitleAndAuthor(bookDTO.title(), bookDTO.author());
+        Optional<BookDetail> bookDetailOptional = bookDetailRepository.findByGoogleBookId(bookDTO.googleBooksId());
 
         if (bookDetailOptional.isPresent()) {
             return bookDetailOptional.get();
         } else {
-            return googleBooksService.getBookDetails(bookDTO.title(), bookDTO.author());
+            return googleBooksService.getBookDetails(bookDTO.googleBooksId());
         }
     }
 

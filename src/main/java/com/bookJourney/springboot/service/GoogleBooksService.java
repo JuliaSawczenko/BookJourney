@@ -11,6 +11,7 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -19,38 +20,38 @@ public class GoogleBooksService {
     @Value("${googlebooks.api.key}")
     private String apiKey;
 
-    public BookDetail getBookDetails(String title, String author) throws BookNotFoundException {
-        String url = buildSearchUrl(title, author);
+    public BookDetail getBookDetails(String googleBookId) throws BookNotFoundException {
+        String url = buildSearchUrl(googleBookId);
         JSONObject volumeInfo = fetchVolumeInfo(url);
-        return parseVolumeInfoToBookDetail(volumeInfo, title, author);
+        return parseVolumeInfoToBookDetail(volumeInfo, googleBookId);
     }
 
-    private String buildSearchUrl(String title, String author) {
-        return "https://www.googleapis.com/books/v1/volumes?q=intitle:" + title + "+inauthor:" + author + "&langRestrict=en&key=" + apiKey;
+    private String buildSearchUrl(String googleBookId) {
+        return "https://www.googleapis.com/books/v1/volumes/" + googleBookId + "?key=" + apiKey;
     }
 
     private JSONObject fetchVolumeInfo(String url) throws BookNotFoundException {
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.getForObject(url, String.class);
         try {
-            JSONObject json = new JSONObject(response);
-            return json.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo");
+            return new JSONObject(response).getJSONObject("volumeInfo");
         } catch (JSONException e) {
             throw new BookNotFoundException();
         }
     }
 
-    private BookDetail parseVolumeInfoToBookDetail(JSONObject volumeInfo, String title, String author) throws JSONException {
+    private BookDetail parseVolumeInfoToBookDetail(JSONObject volumeInfo, String googleBookId) throws JSONException {
+        String title = volumeInfo.optString("title", "No title available");
+        String author = volumeInfo.has("authors") ? String.join(", ", volumeInfo.getJSONArray("authors").toList().stream().map(Object::toString).collect(Collectors.toList())) : "No author available";
         String isbn = volumeInfo.getJSONArray("industryIdentifiers").getJSONObject(0).getString("identifier");
         String description = volumeInfo.optString("description", "No description available");
         String publishedDate = volumeInfo.optString("publishedDate", "No publication date available");
-
         Double averageRating = volumeInfo.has("averageRating") ? volumeInfo.getDouble("averageRating") : null;
         String imageUrl = volumeInfo.getJSONObject("imageLinks").getString("thumbnail");
 
         List<String> categories = parseCategories(volumeInfo);
 
-        return new BookDetail(title, author, isbn, description, publishedDate, imageUrl, categories, averageRating);
+        return new BookDetail(googleBookId, title, author, isbn, description, publishedDate, imageUrl, categories, averageRating);
     }
 
     private List<String> parseCategories(JSONObject volumeInfo) {
