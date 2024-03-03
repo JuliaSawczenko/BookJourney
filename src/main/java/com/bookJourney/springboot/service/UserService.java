@@ -54,8 +54,13 @@ public class UserService {
 
     public void changeName(String username, NameChangeDTO nameChangeDTO) {
         User user = getUserByUsername(username);
-        user.setFirstName(nameChangeDTO.firstName());
-        user.setLastName(nameChangeDTO.lastName());
+
+        if (nameChangeDTO.firstName() != null) {
+            user.setFirstName(nameChangeDTO.firstName());
+        }
+        if (nameChangeDTO.lastName() != null) {
+            user.setLastName(nameChangeDTO.lastName());
+        }
         userRepository.save(user);
     }
 

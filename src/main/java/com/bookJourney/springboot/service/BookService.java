@@ -2,7 +2,6 @@ package com.bookJourney.springboot.service;
 
 import com.bookJourney.springboot.config.BookAlreadyExistsException;
 import com.bookJourney.springboot.config.BookNotFoundException;
-import com.bookJourney.springboot.config.ReviewAlreadyExistsException;
 import com.bookJourney.springboot.dto.BookDTO;
 import com.bookJourney.springboot.dto.NewBookDTO;
 import com.bookJourney.springboot.dto.BookDetailsDTO;
@@ -41,7 +40,7 @@ public class BookService {
         return bookRepository.findByIdAndUser(bookId, user);
     }
 
-    public int addBook(NewBookDTO bookDTO, String username) throws BookNotFoundException, BookAlreadyExistsException, ReviewAlreadyExistsException {
+    public int addBook(NewBookDTO bookDTO, String username) throws BookNotFoundException, BookAlreadyExistsException {
         User user = userService.getUserByUsername(username);
 
         BookDetail bookDetail = new BookDetail();
@@ -60,6 +59,9 @@ public class BookService {
         Book book = mapper.NewBookDTOtoBook(bookDTO);
         book.setUser(user);
         book.setBookDetail(bookDetail);
+        book.setStartDate(bookDTO.startDate());
+        book.setEndDate(bookDTO.endDate());
+
         bookRepository.save(book);
         handleBookStatus(bookDTO, user, book);
         if (book.getId() != null) {
@@ -70,11 +72,27 @@ public class BookService {
     }
 
 
-    public void editBook(NewBookDTO bookDTO, String username, Integer bookId) throws BookNotFoundException, ReviewAlreadyExistsException {
+    public void editBook(NewBookDTO bookDTO, String username, Integer bookId) throws BookNotFoundException {
         User user = userService.getUserByUsername(username);
-        Optional<Book> book = getBookById(bookId, user);
-        if (book.isPresent()) {
-            handleBookStatus(bookDTO, user, book.get());
+        Optional<Book> existingBook = getBookById(bookId, user);
+        Book book;
+        if (existingBook.isPresent()) {
+            book = existingBook.get();
+
+            if (bookDTO.author() != null) {
+                book.getBookDetail().setAuthor(bookDTO.author());
+            }
+            if (bookDTO.title() != null) {
+                book.getBookDetail().setTitle(bookDTO.title());
+            }
+            if (bookDTO.startDate() != null) {
+                book.setStartDate(bookDTO.startDate());
+            }
+            if (bookDTO.endDate() != null) {
+                book.setEndDate(bookDTO.endDate());
+            }
+            bookRepository.save(book);
+            handleBookStatus(bookDTO, user, book);
         } else {
             throw new BookNotFoundException();
         }
@@ -167,7 +185,7 @@ public class BookService {
     }
 
 
-    private void handleBookStatus(NewBookDTO bookDTO, User user, Book book) throws ReviewAlreadyExistsException {
+    private void handleBookStatus(NewBookDTO bookDTO, User user, Book book){
         switch (book.getStatus()) {
             case READ:
                 if (bookDTO.review() != null) {
@@ -176,18 +194,10 @@ public class BookService {
                 if (bookDTO.moods() != null) {
                     moodDataService.submitFinalMoods(bookDTO.moods(), book, user);
                 }
-                if (bookDTO.endDate() != null) {
-                    book.setEndDate(bookDTO.endDate());
-                }
                 break;
             case READING:
                 if (bookDTO.mood() != null) {
                     moodDataService.addCurrentMood(bookDTO.mood(), book, user);
-                }
-                break;
-            case GOING_TO_READ:
-                if (bookDTO.startDate() != null) {
-                    book.setStartDate(bookDTO.startDate());
                 }
                 break;
         }

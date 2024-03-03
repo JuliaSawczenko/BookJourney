@@ -83,6 +83,8 @@ public class MoodDataService {
             if (matchingMood.isPresent()) {
                 UserBookMood userBookMood = matchingMood.get();
                 userBookMood.setScoreOfMood(score);
+
+                userBookMoodsRepository.save(userBookMood);
             } else {
                 UserBookMood newMood = new UserBookMood();
                 newMood.setUser(user);

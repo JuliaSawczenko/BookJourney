@@ -45,7 +45,7 @@ public class UserController {
     }
 
     @PutMapping("/name")
-    public ResponseEntity<?> changeName(@RequestBody @Valid NameChangeDTO nameChangeDTO) {
+    public ResponseEntity<?> changeName(@RequestBody NameChangeDTO nameChangeDTO) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         userService.changeName(username, nameChangeDTO);

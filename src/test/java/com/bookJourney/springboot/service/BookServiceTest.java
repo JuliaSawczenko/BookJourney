@@ -2,7 +2,6 @@ package com.bookJourney.springboot.service;
 
 import com.bookJourney.springboot.config.BookAlreadyExistsException;
 import com.bookJourney.springboot.config.BookNotFoundException;
-import com.bookJourney.springboot.config.ReviewAlreadyExistsException;
 import com.bookJourney.springboot.dto.NewBookDTO;
 import com.bookJourney.springboot.entity.Book;
 import com.bookJourney.springboot.entity.BookDetail;
@@ -57,7 +56,7 @@ public class BookServiceTest {
 
     @Test
     @DisplayName("Should successfully add a new book")
-    public void addBook_success() throws BookNotFoundException, BookAlreadyExistsException, ReviewAlreadyExistsException {
+    public void addBook_success() throws BookNotFoundException, BookAlreadyExistsException{
         // Given
         User user = UserMock.getBasicUser();
         NewBookDTO bookDTO = BookDTOMock.getBookDTOforReadingStatus();

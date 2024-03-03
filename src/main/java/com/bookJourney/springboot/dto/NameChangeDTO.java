@@ -1,7 +1,5 @@
 package com.bookJourney.springboot.dto;
 
-import jakarta.validation.constraints.NotBlank;
-
-public record NameChangeDTO(@NotBlank String firstName,
-                            @NotBlank String lastName) {
+public record NameChangeDTO(String firstName,
+                            String lastName) {
 }

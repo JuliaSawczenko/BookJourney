@@ -2,7 +2,6 @@ package com.bookJourney.springboot.controller;
 
 import com.bookJourney.springboot.config.BookAlreadyExistsException;
 import com.bookJourney.springboot.config.BookNotFoundException;
-import com.bookJourney.springboot.config.ReviewAlreadyExistsException;
 import com.bookJourney.springboot.dto.BookDTO;
 import com.bookJourney.springboot.dto.NewBookDTO;
 import com.bookJourney.springboot.dto.BookDetailsDTO;
@@ -29,14 +28,14 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<MessageResponse> addBook(@RequestBody @Valid NewBookDTO bookDTO, Principal principal) throws BookNotFoundException, BookAlreadyExistsException, ReviewAlreadyExistsException {
+    public ResponseEntity<MessageResponse> addBook(@RequestBody @Valid NewBookDTO bookDTO, Principal principal) throws BookNotFoundException, BookAlreadyExistsException {
         String username = principal.getName();
         int bookId = bookService.addBook(bookDTO, username);
         return ResponseEntity.ok(new MessageResponse("Book id is: " + bookId));
     }
 
     @PutMapping("/{bookId}")
-    public ResponseEntity<MessageResponse> editBook(@PathVariable Integer bookId, @RequestBody @Valid NewBookDTO bookDTO, Principal principal) throws BookNotFoundException, ReviewAlreadyExistsException {
+    public ResponseEntity<MessageResponse> editBook(@PathVariable Integer bookId, @RequestBody @Valid NewBookDTO bookDTO, Principal principal) throws BookNotFoundException{
         String username = principal.getName();
         bookService.editBook(bookDTO, username, bookId);
         return ResponseEntity.ok(new MessageResponse("Book edited successfully"));
