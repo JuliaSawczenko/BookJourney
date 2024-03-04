@@ -151,8 +151,15 @@ public class MoodDataService {
         // Aggregate counts and scores for each mood
         for (UserBookMood moodInstance : moods) {
             String moodName = moodInstance.getMood().toString();
-            totalMoodCounts.put(moodName, totalMoodCounts.getOrDefault(moodName, 0.0) + moodInstance.getCountOfMood());
-            totalMoodScores.put(moodName, totalMoodScores.getOrDefault(moodName, 0.0) + moodInstance.getScoreOfMood());
+            Double countOfMood = (double) moodInstance.getCountOfMood();
+            Double scoreOfMood = moodInstance.getScoreOfMood();
+
+            // Treat nulls as 0.0 for both count and score
+            double count = (countOfMood != null) ? countOfMood : 0.0;
+            double score = (scoreOfMood != null) ? scoreOfMood : 0.0;
+
+            totalMoodCounts.put(moodName, totalMoodCounts.getOrDefault(moodName, 0.0) + count);
+            totalMoodScores.put(moodName, totalMoodScores.getOrDefault(moodName, 0.0) + score);
         }
 
         Map<String, Double> weightedMoodScores = new HashMap<>();
