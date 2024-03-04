@@ -44,11 +44,11 @@ public class BookService {
         User user = userService.getUserByUsername(username);
 
         BookDetail bookDetail = new BookDetail();
-        if (bookDTO.googleBooksId() == null) {
+        if (bookDTO.googleBookId() == null) {
             bookDetail.setAuthor(bookDTO.author());
             bookDetail.setTitle(bookDTO.title());
         } else {
-            if (checkIfBookExists(bookDTO.googleBooksId(), user)) {
+            if (checkIfBookExists(bookDTO.googleBookId(), user)) {
                 throw new BookAlreadyExistsException();
             }
 
@@ -175,12 +175,12 @@ public class BookService {
 
 
     private BookDetail fetchOrCreateBookDetail(NewBookDTO bookDTO) throws BookNotFoundException {
-        Optional<BookDetail> bookDetailOptional = bookDetailRepository.findByGoogleBookId(bookDTO.googleBooksId());
+        Optional<BookDetail> bookDetailOptional = bookDetailRepository.findByGoogleBookId(bookDTO.googleBookId());
 
         if (bookDetailOptional.isPresent()) {
             return bookDetailOptional.get();
         } else {
-            return googleBooksService.getBookDetails(bookDTO.googleBooksId());
+            return googleBooksService.getBookDetails(bookDTO.googleBookId());
         }
     }
 
