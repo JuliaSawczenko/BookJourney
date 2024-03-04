@@ -65,7 +65,7 @@ public class BookServiceTest {
         book.setId(1);
 
         // When
-        when(googleBooksService.getBookDetails(bookDTO.googleBooksId())).thenReturn(bookDetail);
+        when(googleBooksService.getBookDetails(bookDTO.googleBookId())).thenReturn(bookDetail);
         when(bookDetailRepository.save(any(BookDetail.class))).thenReturn(bookDetail);
         bookService.addBook(bookDTO, user.getUsername());
 
@@ -84,7 +84,7 @@ public class BookServiceTest {
 
         // When
         when(userService.getUserByUsername(user.getUsername())).thenReturn(user);
-        when(bookRepository.findByBookDetail_GoogleBookIdAndUser(bookDTO.googleBooksId(), user)).thenReturn(Optional.of(book));
+        when(bookRepository.findByBookDetail_GoogleBookIdAndUser(bookDTO.googleBookId(), user)).thenReturn(Optional.of(book));
 
         // Then
         assertThrows(BookAlreadyExistsException.class, () -> bookService.addBook(bookDTO, user.getUsername()));
