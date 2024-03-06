@@ -12,7 +12,6 @@ import java.util.HashSet;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "authority", constant = "DEFAULT_AUTHORITY")
     @Mapping(target = "accountCreated", ignore = true)

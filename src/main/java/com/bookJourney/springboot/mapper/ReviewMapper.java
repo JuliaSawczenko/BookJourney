@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @Mapper(componentModel = "spring")
 public interface ReviewMapper {
 
-
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "book", ignore = true)

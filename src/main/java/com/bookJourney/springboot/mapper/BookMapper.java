@@ -9,7 +9,6 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface BookMapper {
 
-
     @Mappings({
             @Mapping(source = "bookDetail.title", target = "title"),
             @Mapping(source = "bookDetail.author", target = "author"),
