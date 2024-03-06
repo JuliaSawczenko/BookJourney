@@ -40,6 +40,7 @@ public class BookService {
         return bookRepository.findByIdAndUser(bookId, user);
     }
 
+
     public int addBook(NewBookDTO bookDTO, String username) throws BookNotFoundException, BookAlreadyExistsException {
         User user = userService.getUserByUsername(username);
 
@@ -51,19 +52,14 @@ public class BookService {
             if (checkIfBookExists(bookDTO.googleBookId(), user)) {
                 throw new BookAlreadyExistsException();
             }
-
             bookDetail = fetchOrCreateBookDetail(bookDTO);
         }
 
         bookDetailRepository.save(bookDetail);
-        Book book = mapper.NewBookDTOtoBook(bookDTO);
-        book.setUser(user);
-        book.setBookDetail(bookDetail);
-        book.setStartDate(bookDTO.startDate());
-        book.setEndDate(bookDTO.endDate());
-
+        Book book = new Book(user, bookDetail, bookDTO.status(), false, bookDTO.startDate(), bookDTO.endDate());
         bookRepository.save(book);
         handleBookStatus(bookDTO, user, book);
+
         if (book.getId() != null) {
             return book.getId();
         } else {
@@ -76,21 +72,21 @@ public class BookService {
         User user = userService.getUserByUsername(username);
         Optional<Book> existingBook = getBookById(bookId, user);
         Book book;
+
         if (existingBook.isPresent()) {
             book = existingBook.get();
 
-            if (bookDTO.author() != null) {
-                book.getBookDetail().setAuthor(bookDTO.author());
+            if (bookDTO.status() != null) {
+                book.setStatus(bookDTO.status());
             }
-            if (bookDTO.title() != null) {
-                book.getBookDetail().setTitle(bookDTO.title());
-            }
+
             if (bookDTO.startDate() != null) {
                 book.setStartDate(bookDTO.startDate());
             }
             if (bookDTO.endDate() != null) {
                 book.setEndDate(bookDTO.endDate());
             }
+
             bookRepository.save(book);
             handleBookStatus(bookDTO, user, book);
         } else {
@@ -105,8 +101,8 @@ public class BookService {
         if (book.isPresent()) {
             BookDetailsDTO bookDetailsDTO = mapper.toBookDetailsDTO(book.get());
             bookDetailsDTO.setReview(reviewService.getReviewOfBook(book.get(), user));
-            bookDetailsDTO.setMoodPercentages(moodDataService.getStatisticsForUserAndBook(username, bookId));
-            bookDetailsDTO.setMoodScores(moodDataService.getMoodScores(username, bookId));
+            bookDetailsDTO.setMoodsPercentages(moodDataService.getStatisticsForUserAndBook(username, bookId));
+            bookDetailsDTO.setMoodsScores(moodDataService.getMoodScores(username, bookId));
             return bookDetailsDTO;
         } else {
             throw new BookNotFoundException();

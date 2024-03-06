@@ -10,23 +10,13 @@ import org.mapstruct.*;
 public interface BookMapper {
 
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "user", ignore = true)
-    @Mapping(target = "bookDetail", ignore = true)
-    @Mapping(target = "favourite", ignore = true)
-    @Mapping(target = "startDate", ignore = true)
-    @Mapping(target = "endDate", ignore = true)
-    @Mapping(target = "review", ignore = true)
-    @Mapping(target = "userBookMoods", ignore = true)
-    Book NewBookDTOtoBook(NewBookDTO bookDTO);
-
-
     @Mappings({
             @Mapping(source = "bookDetail.title", target = "title"),
             @Mapping(source = "bookDetail.author", target = "author"),
+            @Mapping(source = "bookDetail.googleBookId", target = "googleBookId"),
             @Mapping(target = "review", ignore = true),
-            @Mapping(target = "moodPercentages", ignore = true),
-            @Mapping(target = "moodScores", ignore = true),
+            @Mapping(target = "moodsPercentages", ignore = true),
+            @Mapping(target = "moodsScores", ignore = true),
             @Mapping(source = "bookDetail.isbn", target = "isbn"),
             @Mapping(source = "bookDetail.description", target = "description"),
             @Mapping(source = "bookDetail.publishedDate", target = "publishedDate"),
@@ -43,11 +33,5 @@ public interface BookMapper {
             @Mapping(source = "bookDetail.imageUrl", target = "imageUrl")
     })
     BookDTO toBookDTO(Book book);
-
-    @AfterMapping
-    default void setDefaultValues(@MappingTarget Book book) {
-        book.setFavourite(false);
-    }
-
 
 }

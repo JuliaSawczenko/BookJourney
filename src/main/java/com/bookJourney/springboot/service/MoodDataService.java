@@ -3,7 +3,6 @@ package com.bookJourney.springboot.service;
 import com.bookJourney.springboot.config.BookNotFoundException;
 import com.bookJourney.springboot.config.InvalidArgumentsException;
 import com.bookJourney.springboot.dto.BookDTO;
-import com.bookJourney.springboot.dto.MoodsPercentageDTO;
 import com.bookJourney.springboot.entity.Book;
 import com.bookJourney.springboot.entity.EnumMood;
 import com.bookJourney.springboot.entity.User;
@@ -69,10 +68,10 @@ public class MoodDataService {
     }
 
 
-    void submitFinalMoods(MoodsPercentageDTO moods, Book book, User user) {
+    void submitFinalMoods(Map<EnumMood, Double>  moods, Book book, User user) {
         List<UserBookMood> presentMoods = userBookMoodsRepository.findByUserAndBook(user, book);
 
-        for (Map.Entry<EnumMood, Double> entry : moods.moodsPercentages().entrySet()) {
+        for (Map.Entry<EnumMood, Double> entry : moods.entrySet()) {
             EnumMood mood = entry.getKey();
             Double score = entry.getValue();
 
@@ -97,7 +96,7 @@ public class MoodDataService {
         }
     }
 
-    MoodsPercentageDTO getMoodScores(String username, Integer bookId) throws BookNotFoundException {
+    Map<EnumMood, Double> getMoodScores(String username, Integer bookId) throws BookNotFoundException {
         User user = userService.getUserByUsername(username);
         Optional<Book> book = bookRepository.findByIdAndUser(bookId, user);
         if (book.isPresent()) {
@@ -106,16 +105,19 @@ public class MoodDataService {
             usersAndBookMoods.forEach(userBookMood -> {
                 EnumMood mood = userBookMood.getMood();
                 Double score = userBookMood.getScoreOfMood();
-                moodScores.put(mood, score);
+
+                if (score != null) {
+                    moodScores.put(mood, score);
+                }
             });
-            return new MoodsPercentageDTO(moodScores);
+            return moodScores;
         } else {
             throw new BookNotFoundException();
         }
     }
 
     // Takes into account moods for a specific books for a specific user
-    MoodsPercentageDTO getStatisticsForUserAndBook(String username, Integer bookId) throws BookNotFoundException {
+    Map<EnumMood, Double> getStatisticsForUserAndBook(String username, Integer bookId) throws BookNotFoundException {
         User user = userService.getUserByUsername(username);
         Optional<Book> book = bookRepository.findByIdAndUser(bookId, user);
         if (book.isPresent()) {
@@ -137,14 +139,14 @@ public class MoodDataService {
     }
 
     // Takes into account all moods for all books for a specific user
-    private MoodsPercentageDTO getStatisticsForUser(String username) {
+    private Map<EnumMood, Double> getStatisticsForUser(String username) {
         User user = userService.getUserByUsername(username);
         List<UserBookMood> usersMoods = userBookMoodsRepository.findByUser(user);
         return calculateStatistics(usersMoods);
     }
 
 
-    private MoodsPercentageDTO calculateStatistics(List<UserBookMood> moods) {
+    private Map<EnumMood, Double> calculateStatistics(List<UserBookMood> moods) {
         Map<String, Double> totalMoodCounts = new HashMap<>();
         Map<String, Double> totalMoodScores = new HashMap<>();
 
@@ -182,7 +184,7 @@ public class MoodDataService {
             moodPercentages.put(EnumMood.valueOf(entry.getKey()), percentage);
         }
 
-        return new MoodsPercentageDTO(moodPercentages);
+        return moodPercentages;
     }
 }
 
