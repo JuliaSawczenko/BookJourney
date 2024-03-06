@@ -16,7 +16,6 @@ public interface ReviewMapper {
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "book", ignore = true)
     @Mapping(target = "dateAdded", ignore = true)
-    @Mapping(target = "sharedBook", ignore = true)
     Review reviewDTOtoReview(ReviewDTO dto);
 
     ReviewDTO reviewToReviewDTO(Review review);
